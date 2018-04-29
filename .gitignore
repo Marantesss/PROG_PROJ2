@@ -1,0 +1,13 @@
+Debug/*
+*.gitattributes
+*.vcxproj*
+cwcreator/Debug/*
+cwcreator/*.vcxproj*
+cwcreator/*.sln
+cwcreator/*.vs
+cwcreator/x64/*
+cwplayer/Debug/*
+cwplayer/*.vcxproj*
+cwplayer/*.sln
+cwplayer/*.vs
+cwplayer/x64/*
