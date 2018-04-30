@@ -58,10 +58,10 @@ bool Dictionary::isValid(string word) // Verifica se uma palavra pertence ao dic
 {
 	transform(word.begin(), word.end(), word.begin(), ::toupper); // Transforma a word em maiscula
 
-	if (synonymes[word].empty) // Se o map devolver um vetor vazio, a palavra nao existe
-		return false;
-	else
+	if (synonymes.find(word) != synonymes.end()) // Se a posicao da word no map for o final do map, a word nao existe em map
 		return true;
+	else
+		return false;
 	/*
 	for (int i = 0; i <= synonymes.size(); i++)
 	{
@@ -77,15 +77,11 @@ vector<string> Dictionary::wildcard(string pseudoWord) // Recebe parte de uma pa
 {
 	vector<string> matchingWords;
 
-	for (int i = 0; synonymes.size(); i++)
+	for (auto p : synonymes) // p.first = KEY e p.second = VALUE
 	{
-		if (wildcardMatch(/*WORD*/.c_str(), pseudoWord.c_str()))
-		{
-			matchingWords.push_back(/*WORD*/);
-		}
-	}
-	return matchingWords;
-}
+		if (wildcardMatch(p.first.c_str(), pseudoWord.c_str()))
+			matchingWords.push_back(p.first);
+	}	return matchingWords;}
 
 bool Dictionary::wildcardMatch(const char *str, const char *strWild) // Funcao simple wildcard do Anexo C
 {
