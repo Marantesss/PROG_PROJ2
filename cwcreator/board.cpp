@@ -42,3 +42,86 @@ void Board::showBoard()
 	}
 
 }
+
+void Board::insertWord(string position, string word)
+{
+	int line, column;
+	line = getNumber(position[0]);
+	column = getNumber(position[1]);
+	char orientation = position[2];
+
+	if (wordFitsSpace(line, column, orientation, word))
+	{
+		if (toupper(orientation) == 'V' && wordMatchesSpace(line, column, orientation, word))
+			for (int i = 0; i < word.length(); i++)
+			{
+				board.at(line).at(column) = word[i];
+				line++;
+			};
+		
+		if (toupper(orientation) == 'H' && wordMatchesSpace(line, column, orientation, word))
+			for (int i = 0; i < word.length(); i++)
+			{
+				board.at(line).at(column) = word[i];
+				column++;
+			};
+	}
+
+}
+
+int Board::getNumber(char letter)
+{
+	toupper(letter);
+
+	return (int)letter - 65;
+}
+
+bool Board::wordFitsSpace(int const &line, int const &column, char const &orientation, string const &word)
+{
+	if (toupper(orientation) == 'V')
+	{
+		if (getLines() - line >= word.length())
+			return true;
+		else return false;
+	}
+	if (toupper(orientation) == 'H')
+	{
+		if (getColumns() - column >= word.length())
+			return true;
+		else return false;
+	}	
+}
+
+bool Board::wordMatchesSpace(int const &line, int const &column, char const &orientation, string const &word)
+{
+	
+	int movingBoardVariable; 
+
+	if (toupper(orientation) == 'V')
+	{
+		movingBoardVariable = line;
+		for (int i = 0; i < word.length(); i++)
+		{
+			if (board.at(movingBoardVariable).at(column) != '.')  // ADICIONAR CODIGO PARA REMOVER PALAVRAS (LETRAS/POSICOES QUE COINCIDEM)
+				if (board.at(movingBoardVariable).at(column) != word[i])
+					return false;
+			movingBoardVariable++;
+		}
+		return true;
+	}
+	
+	if (toupper(orientation) == 'H')
+	{
+		movingBoardVariable = column;
+		for (int i = 0; i < word.length(); i++)
+		{
+			if (board.at(line).at(movingBoardVariable) != '.')
+				if (board.at(line).at(movingBoardVariable) != word[i])
+					return false;
+			movingBoardVariable++;
+		}
+		return true;
+	}
+	
+
+}
