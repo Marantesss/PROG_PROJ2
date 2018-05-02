@@ -81,7 +81,10 @@ vector<string> Dictionary::wildcard(string pseudoWord) // Recebe parte de uma pa
 	{
 		if (wildcardMatch(p.first.c_str(), pseudoWord.c_str()))
 			matchingWords.push_back(p.first);
-	}	return matchingWords;}
+	}
+
+	return matchingWords;
+}
 
 bool Dictionary::wildcardMatch(const char *str, const char *strWild) // Funcao simple wildcard do Anexo C
 {
