@@ -17,6 +17,8 @@ public:
 	bool wordFitsSpace(int const &line, int const &column, char const &orientation, string const &word);
 	bool wordMatchesSpace(int const &line, int const &column, char const &orientation, string const &word);
 	int getIndex(char letter);
+	void removeWord(string position);
+	bool isInNonRemovable(int line, int colunms);
 private:
 	int numColumns; // Numero de colunas
 	int numLines; // Numero de linhas
