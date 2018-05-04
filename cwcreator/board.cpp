@@ -39,7 +39,7 @@ void Board::showBoard()
 		cout << endl;
 		cout << upperLetters.at(i) << "  ";
 		for (int j = 0; j < numColumns; j++)
-			cout << board.at(i).at(j) << "  ";
+			cout << board.at(i).at(j) << "  "; // 
 	}
 	cout << endl;
 }
@@ -116,10 +116,12 @@ bool Board::wordMatchesSpace(int const &line, int const &column, char const &ori
 		for (int i = 0; i < word.length(); i++)
 		{
 			if (board.at(movingBoardVariable).at(column) != '.')  // ADD  PALAVRAS (LETRAS/POSICOES QUE COINCIDEM) ()
+			{
 				if (board.at(movingBoardVariable).at(column) != word[i])
 					return false;
-			pair<int, int> dontRemove = make_pair(movingBoardVariable, column);
-			temporaryNonRemovableLetters.push_back(dontRemove);
+				pair<int, int> dontRemove = make_pair(movingBoardVariable, column);
+				temporaryNonRemovableLetters.push_back(dontRemove);
+			}
 			movingBoardVariable++;
 		}
 		nonRemovableLetters.insert(nonRemovableLetters.end(), temporaryNonRemovableLetters.begin(), temporaryNonRemovableLetters.end());
@@ -136,13 +138,65 @@ bool Board::wordMatchesSpace(int const &line, int const &column, char const &ori
 		for (int i = 0; i < word.length(); i++)
 		{
 			if (board.at(line).at(movingBoardVariable) != '.')
+			{
 				if (board.at(line).at(movingBoardVariable) != word[i])
 					return false;
-			pair<int, int> dontRemove = make_pair(line, movingBoardVariable);
-			temporaryNonRemovableLetters.push_back(dontRemove);
+				pair<int, int> dontRemove = make_pair(line, movingBoardVariable);
+				temporaryNonRemovableLetters.push_back(dontRemove);
+			}
 			movingBoardVariable++;
 		}
 		nonRemovableLetters.insert(nonRemovableLetters.end(), temporaryNonRemovableLetters.begin(), temporaryNonRemovableLetters.end());
 		return true;
 	}
+}
+
+
+void Board::removeWord(string position)
+{
+	int line, column;
+	line = getIndex(toupper(position[0]));
+	column = getIndex(toupper(position[1]));
+	char orientation = toupper(position[2]);
+
+	if (orientation == 'V')
+	{
+		if (line != 0)
+			board.at(line - 1).at(column) = '.';
+		
+		while (board.at(line).at(column) != '#' && line < getLines())
+		{
+			if (!isInNonRemovable(line, column)) // isNonRemovable gets line and column;
+				board.at(line).at(column) = '.';
+			line++;
+		}
+		if (line < getLines())
+			board.at(line).at(column) = '.';
+	}
+
+	if (orientation == 'H')
+	{
+		if (column != 0)
+			board.at(line).at(column-1) = '.';
+
+		while (board.at(line).at(column) != '#' && column < getColumns())
+		{
+			if (!isInNonRemovable(line, column)) // isNonRemovable gets line and column;
+				board.at(line).at(column) = '.';
+			column++;
+		}
+		if (column < getColumns())
+			board.at(line).at(column) = '.';
+	}
+}
+
+bool Board::isInNonRemovable(int line, int column)
+{
+	for (int i = 0; i < nonRemovableLetters.size(); i++)
+		if (nonRemovableLetters.at(i).first == line && nonRemovableLetters.at(i).second == column)
+		{
+			nonRemovableLetters.erase(nonRemovableLetters.begin() + i);
+			return true;
+		}
+	return false;
 }
