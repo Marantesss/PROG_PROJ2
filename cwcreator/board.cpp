@@ -58,7 +58,7 @@ void Board::insertWord(string position, string word)
 				board.at(line - 1).at(column) = '#';
 			for (int i = 0; i < word.length(); i++)
 			{
-				board.at(line).at(column) = word[i];
+				board.at(line).at(column) = toupper(word[i]);
 				line++;
 			};
 			if (line < getLines() - 1)
@@ -70,7 +70,7 @@ void Board::insertWord(string position, string word)
 				board.at(line).at(column - 1) = '#';
 			for (int i = 0; i < word.length(); i++)
 			{
-				board.at(line).at(column) = word[i];
+				board.at(line).at(column) = toupper(word[i]);
 				column++;
 			};
 			if (column < getColumns() - 1)
