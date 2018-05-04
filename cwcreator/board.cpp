@@ -1,8 +1,9 @@
 #include "board.h"
 #include <vector>
 #include <iostream>
+#include <utility>
 
-Board::Board(int columns, int lines)
+Board::Board(int lines, int columns)
 {
 	numColumns = columns;
 	numLines = lines;
@@ -40,51 +41,60 @@ void Board::showBoard()
 		for (int j = 0; j < numColumns; j++)
 			cout << board.at(i).at(j) << "  ";
 	}
-
+	cout << endl;
 }
 
 void Board::insertWord(string position, string word)
 {
 	int line, column;
-	line = getNumber(position[0]);
-	column = getNumber(position[1]);
-	char orientation = position[2];
+	line = getIndex(toupper(position[0]));
+	column = getIndex(toupper(position[1]));
+	char orientation = toupper(position[2]);
 
 	if (wordFitsSpace(line, column, orientation, word))
 	{
-		if (toupper(orientation) == 'V' && wordMatchesSpace(line, column, orientation, word))
+		if (orientation == 'V' && wordMatchesSpace(line, column, orientation, word)) {
+			if (line != 0)
+				board.at(line - 1).at(column) = '#';
 			for (int i = 0; i < word.length(); i++)
 			{
 				board.at(line).at(column) = word[i];
 				line++;
 			};
-		
-		if (toupper(orientation) == 'H' && wordMatchesSpace(line, column, orientation, word))
+			if (line < getLines() - 1)
+				board.at(line).at(column) = '#';
+		}
+
+		if (orientation == 'H' && wordMatchesSpace(line, column, orientation, word)) {
+			if (column != 0)
+				board.at(line).at(column - 1) = '#';
 			for (int i = 0; i < word.length(); i++)
 			{
 				board.at(line).at(column) = word[i];
 				column++;
 			};
+			if (column < getColumns() - 1)
+				board.at(line).at(column) = '#';
+		}
+
 	}
 
 }
 
-int Board::getNumber(char letter)
+int Board::getIndex(char letter)
 {
-	toupper(letter);
-
 	return (int)letter - 65;
 }
 
 bool Board::wordFitsSpace(int const &line, int const &column, char const &orientation, string const &word)
 {
-	if (toupper(orientation) == 'V')
+	if (orientation == 'V')
 	{
 		if (getLines() - line >= word.length())
 			return true;
 		else return false;
 	}
-	if (toupper(orientation) == 'H')
+	if (orientation == 'H')
 	{
 		if (getColumns() - column >= word.length())
 			return true;
@@ -94,34 +104,45 @@ bool Board::wordFitsSpace(int const &line, int const &column, char const &orient
 
 bool Board::wordMatchesSpace(int const &line, int const &column, char const &orientation, string const &word)
 {
-	
-	int movingBoardVariable; 
-
-	if (toupper(orientation) == 'V')
+	vector<pair<int, int>> temporaryNonRemovableLetters;
+	int movingBoardVariable;
+	if (orientation == 'V')  
 	{
 		movingBoardVariable = line;
+		if (line != 0)
+			if (board.at(movingBoardVariable - 1).at(column) != '.' && board.at(movingBoardVariable - 1).at(column) != '#')
+				return false;
+
 		for (int i = 0; i < word.length(); i++)
 		{
-			if (board.at(movingBoardVariable).at(column) != '.')  // ADICIONAR CODIGO PARA REMOVER PALAVRAS (LETRAS/POSICOES QUE COINCIDEM)
+			if (board.at(movingBoardVariable).at(column) != '.')  // ADD  PALAVRAS (LETRAS/POSICOES QUE COINCIDEM) ()
 				if (board.at(movingBoardVariable).at(column) != word[i])
 					return false;
+			pair<int, int> dontRemove = make_pair(movingBoardVariable, column);
+			temporaryNonRemovableLetters.push_back(dontRemove);
 			movingBoardVariable++;
 		}
+		nonRemovableLetters.insert(nonRemovableLetters.end(), temporaryNonRemovableLetters.begin(), temporaryNonRemovableLetters.end());
 		return true;
 	}
 	
-	if (toupper(orientation) == 'H')
+	if (orientation == 'H')
 	{
 		movingBoardVariable = column;
+		if (column != 0)
+			if (board.at(line).at(movingBoardVariable - 1) != '.' && board.at(line).at(movingBoardVariable - 1) != '#')
+				return false;
+
 		for (int i = 0; i < word.length(); i++)
 		{
 			if (board.at(line).at(movingBoardVariable) != '.')
 				if (board.at(line).at(movingBoardVariable) != word[i])
 					return false;
+			pair<int, int> dontRemove = make_pair(line, movingBoardVariable);
+			temporaryNonRemovableLetters.push_back(dontRemove);
 			movingBoardVariable++;
 		}
+		nonRemovableLetters.insert(nonRemovableLetters.end(), temporaryNonRemovableLetters.begin(), temporaryNonRemovableLetters.end());
 		return true;
 	}
-	
-
 }
