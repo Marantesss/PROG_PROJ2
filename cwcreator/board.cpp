@@ -76,9 +76,12 @@ void Board::insertWord(string position, string word)
 			if (column < getColumns() - 1)
 				board.at(line).at(column) = '#';
 		}
+		else
+			cerr << "The word does not match the space" << endl;
 
 	}
-
+	else
+		cerr << "The word does not fit the space" << endl;
 }
 
 int Board::getIndex(char letter)
@@ -117,7 +120,7 @@ bool Board::wordMatchesSpace(int const &line, int const &column, char const &ori
 		{
 			if (board.at(movingBoardVariable).at(column) != '.')  // ADD  PALAVRAS (LETRAS/POSICOES QUE COINCIDEM) ()
 			{
-				if (board.at(movingBoardVariable).at(column) != word[i])
+				if (board.at(movingBoardVariable).at(column) != toupper(word[i]))
 					return false;
 				pair<int, int> dontRemove = make_pair(movingBoardVariable, column);
 				temporaryNonRemovableLetters.push_back(dontRemove);
@@ -139,7 +142,7 @@ bool Board::wordMatchesSpace(int const &line, int const &column, char const &ori
 		{
 			if (board.at(line).at(movingBoardVariable) != '.')
 			{
-				if (board.at(line).at(movingBoardVariable) != word[i])
+				if (board.at(line).at(movingBoardVariable) != toupper (word[i]))
 					return false;
 				pair<int, int> dontRemove = make_pair(line, movingBoardVariable);
 				temporaryNonRemovableLetters.push_back(dontRemove);
@@ -200,3 +203,4 @@ bool Board::isInNonRemovable(int line, int column)
 		}
 	return false;
 }
+
