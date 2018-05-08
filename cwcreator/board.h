@@ -19,6 +19,8 @@ public:
 	int getIndex(char letter);
 	void removeWord(string position);
 	bool isInNonRemovable(int line, int colunms);
+	void finalizeBoard();
+	void saveBoard(string fileName);
 private:
 	int numColumns; // Numero de colunas
 	int numLines; // Numero de linhas

@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <utility>
+#include <fstream>
 
 Board::Board(int lines, int columns)
 {
@@ -195,12 +196,37 @@ void Board::removeWord(string position)
 
 bool Board::isInNonRemovable(int line, int column)
 {
-	for (int i = 0; i < nonRemovableLetters.size(); i++)
+	for (int i = 0; i < nonRemovableLetters.size(); i++) // Checks if the pair is in the nonRemovableLetters 
 		if (nonRemovableLetters.at(i).first == line && nonRemovableLetters.at(i).second == column)
 		{
-			nonRemovableLetters.erase(nonRemovableLetters.begin() + i);
+			nonRemovableLetters.erase(nonRemovableLetters.begin() + i); // If so removes that pair 
 			return true;
 		}
 	return false;
 }
 
+void Board::finalizeBoard()
+{
+	for (int i = 0; i < getLines(); i++) // Fills the elements that are not letters or '#' with '#'
+		for (int j = 0; j < getColumns(); j++)
+			if (board.at(i).at(j) == '.')
+				board.at(i).at(j) = '#';
+
+}
+
+void Board::saveBoard(string fileName)
+{
+	
+	ofstream boardFile;
+	fileName += ".txt"; 
+	boardFile.open(fileName);
+
+	for (int i = 0; i < numLines; i++)
+	{
+		boardFile << endl;
+		for (int j = 0; j < numColumns; j++)
+			boardFile << board.at(i).at(j) << "  ";
+	}
+
+
+}
