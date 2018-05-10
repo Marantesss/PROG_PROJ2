@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include "dictionary.h"
 
 
 using namespace std;
@@ -21,6 +22,7 @@ public:
 	bool isInNonRemovable(int line, int colunms);
 	void finalizeBoard();
 	void saveBoard(string fileName);
+	void loadBoard(string fileName);
 private:
 	int numColumns; // Numero de colunas
 	int numLines; // Numero de linhas

@@ -216,10 +216,11 @@ void Board::finalizeBoard()
 
 void Board::saveBoard(string fileName)
 {
-	
 	ofstream boardFile;
 	fileName += ".txt"; 
 	boardFile.open(fileName);
+	
+	
 
 	for (int i = 0; i < numLines; i++)
 	{
@@ -230,3 +231,17 @@ void Board::saveBoard(string fileName)
 
 
 }
+
+/*void Board::loadBoard(string fileName)
+{
+	ifstream boardFile;
+	string line;
+	boardFile.open(fileName);
+	
+	if (boardFile.is_open)
+		cout << "Couldn't open the file";
+
+	
+
+
+}*/

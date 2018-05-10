@@ -17,7 +17,8 @@ private:
 	vector<string> extractWords(string line); // Separa as palavras separadas por ", "  e retorna um membro do vetor synonymes
 	bool wildcardMatch(const char *str, const char *strWild); // Funcao simple wildcard do Anexo C
 	// Variaveis
-	map<string, vector<string>> synonymes; // Map onde vai ser guardado as linhas do ficheiro synonyms (palavra, sinonimo, sinonimo, sinonimo)
+	map<string, vector<string>> synonymes;	// Map onde vai ser guardado as linhas do ficheiro synonyms (palavra, sinonimo, sinonimo, sinonimo)
+	string dictionaryFileName;
 };
 
 #endif
