@@ -15,13 +15,10 @@ public:
 	int getLines() const; // Devolve o numero de linhas
 	void showBoard(); // Da print ao tabuleiro
 	void insertWord(string position, string word);
-	bool wordFitsSpace(int const &line, int const &column, char const &orientation, string const &word);
-	bool wordMatchesSpace(int const &line, int const &column, char const &orientation, string const &word);
-	int getIndex(char letter);
 	void removeWord(string position);
-	bool isInNonRemovable(int line, int colunms);
 	void finalizeBoard();
-	void saveBoard(string fileName);
+	void saveBoard(string dictionaryFileName);
+	void saveFinalBoard(string dictionaryFileName);
 	void loadBoard(string fileName);
 private:
 	int numColumns; // Numero de colunas
@@ -30,6 +27,11 @@ private:
 	vector<char> upperLetters = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
 	vector<char> lowerLetters = {' ','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 	vector<pair<int, int>> nonRemovableLetters;
+	bool wordFitsSpace(int const &line, int const &column, char const &orientation, string const &word);
+	bool wordMatchesSpace(int const &line, int const &column, char const &orientation, string const &word);
+	int getIndex(char letter);
+	bool isInNonRemovable(int line, int colunms);
+	vector<char> loadBoardLine(string &line);
 };
 
 #endif

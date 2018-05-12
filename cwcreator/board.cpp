@@ -1,8 +1,11 @@
 #include "board.h"
+#include "puzzle.h"
 #include <vector>
 #include <iostream>
 #include <utility>
 #include <fstream>
+
+void loadBoardLine(vector<char> &boardLine, string &line);
 
 Board::Board(int lines, int columns)
 {
@@ -214,13 +217,39 @@ void Board::finalizeBoard()
 
 }
 
-void Board::saveBoard(string fileName)
+void Board::saveBoard(string dictionaryFileName)
 {
 	ofstream boardFile;
+	
+	cout << "File will be saved into a text file (enter only the name of the file)  ";
+	string fileName;
+	cin >> fileName;
+
 	fileName += ".txt"; 
 	boardFile.open(fileName);
 	
-	
+	boardFile << dictionaryFileName << endl;
+
+	for (int i = 0; i < numLines; i++)
+	{
+		boardFile << endl;
+		for (int j = 0; j < numColumns; j++)
+			boardFile << board.at(i).at(j) << "  ";
+	}
+
+
+}
+void Board::saveFinalBoard(string dictionaryFileName)
+{
+	ofstream boardFile;
+
+	string fileName;
+	cin >> fileName;
+
+	fileName += ".txt";
+	boardFile.open(fileName);
+
+	boardFile << dictionaryFileName << endl;
 
 	for (int i = 0; i < numLines; i++)
 	{
@@ -232,16 +261,43 @@ void Board::saveBoard(string fileName)
 
 }
 
-/*void Board::loadBoard(string fileName)
+
+void Board::loadBoard(string fileName)
 {
 	ifstream boardFile;
 	string line;
+
 	boardFile.open(fileName);
 	
-	if (boardFile.is_open)
+	if (!boardFile.is_open())
 		cout << "Couldn't open the file";
 
+	getline(boardFile, line);
+	boardFile.seekg(line.length() + 4); // moves the pointer to the line containing
 	
+	getline(boardFile, line);
 
+	while(!boardFile.eof())
+	{
+		board.push_back(loadBoardLine(line));
+		getline(boardFile, line);
+		if (line == "\n") 
+			break;
+	}
+	cout << endl;
+		
 
-}*/
+}
+
+vector<char> Board::loadBoardLine(string &line)
+{
+	vector<char> boardLine;
+	for (int i = 0; i < line.length(); i++)
+		if (line[i] != ' ' && line[i] != '\n')
+			boardLine.push_back(line[i]);
+	
+	numColumns = boardLine.size();
+	numLines++;
+
+	return boardLine;
+}

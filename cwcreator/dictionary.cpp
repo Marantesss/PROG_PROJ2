@@ -2,8 +2,6 @@
 #include <algorithm> // Transform
 
 Dictionary::Dictionary(string fileName) {
-	dictionaryFileName = fileName;
-
 	string s; // String onde vai ser guardado uma linha do ficheiro de sinonimos
 	ifstream file;
 
