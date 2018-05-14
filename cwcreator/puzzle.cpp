@@ -90,8 +90,14 @@ void Puzzle::puzzleOperations(Board b, Dictionary dic) {
 	string position, word;
 		
 	while (true) {
-		cout << endl << "Position ('LCD' / CTRL-Z = stop)? ";
+		cout << endl << "Position ('LCD' / CTRL-Z = stop / ? = help)? ";
 		cin >> position;
+		if (position == "?") {  // Help input
+			cout << "=== HELP ===" << endl;
+			cout << "Enter coordinates and direction" << endl << "Example: CbH = Coordinates (C,b) horizontal" << endl;
+			cout << endl << "Position ('LCD' / CTRL-Z = stop)? ";
+			cin >> position;
+		}
 		if (cin.fail()) // Ends if entered CTRL+Z
 			if (cin.eof()) {
 				cin.clear();
@@ -99,25 +105,29 @@ void Puzzle::puzzleOperations(Board b, Dictionary dic) {
 			}
 		cin.clear();
 		cin.ignore(1000, '\n');
-		cout << "Word? ";
+		cout << "Word (? = help)? ";
 		cin >> word;
-		if (word == "?")  // Help input
-			cout << "help";
-		else if (word == "-") // Remove word input
-			b.removeWord(position);
-		else { // Insert word input
-			dic.isValid(word);
-			b.insertWord(position, word);
+		cin.clear();
+		cin.ignore(1000, '\n');
+		if (word == "?") {  // Help input
+			cout << "=== HELP ===" << endl;
+			cout << "Enter a word (if its not in the dictionary you can try again)" << endl << endl;
 		}
+		if (word == "-") // Remove word input
+			b.removeWord(position);
+		if (dic.isValid(word)) // Does the word belong in the dictionary?
+			b.insertWord(position, word); // Insert word input
+		else if (word != "?" && word != "-") // Only shows error when word is different from 'help' and 'delete'
+			cout << "Invalid word" << endl;
 		b.showBoard();
 		cout << endl;
 	}
 
 	int option;
-	cout << endl << "OPTIONS \n";
-	cout << "1- Save and resume later \n" << "2- Finish" << endl;
 
 	do {
+		cout << endl << "OPTIONS" << endl;
+		cout << "1- Save and resume later" << endl << "2- Finish" << endl;
 		cin >> option;
 		if (option != 1 && option != 2)   // Invalid entries 
 			cout << "Not a valid option..." << endl << endl;
@@ -125,7 +135,7 @@ void Puzzle::puzzleOperations(Board b, Dictionary dic) {
 		if (option == 1) 
 			b.saveBoard(dictionaryFileName);
 		else if (option == 2) {
-			b.finalizeBoard();
+			b.finalizeBoard(); // Fills the elements that are not letters or '#' with '#'
 			b.saveFinalBoard(dictionaryFileName);
 		}
 	} while (option != 1 && option != 2);
@@ -133,7 +143,6 @@ void Puzzle::puzzleOperations(Board b, Dictionary dic) {
 }
 
 int Puzzle::resumePuzzle() { // Resume a criacao de um puzzle
-	
 	string dictionaryFile_name, crosswordsFile_name;
 	ifstream dicFile, crossFile;
 

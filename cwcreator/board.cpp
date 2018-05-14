@@ -56,13 +56,11 @@ void Board::insertWord(string position, string word)
 	char orientation = toupper(position[2]);
 	transform(word.begin(), word.end(), word.begin(), ::toupper); // Changes the word to uppercase
 
-	if (wordFitsSpace(line, column, orientation, word))
-	{
+	if (wordFitsSpace(line, column, orientation, word)) {
 		if (orientation == 'V' && wordMatchesSpace(line, column, orientation, word)) { // insert VERTICAL words, if the word matches the space
 			if (line != 0)
 				board.at(line - 1).at(column) = '#'; // If the word is not being inserted in the beginning of a column places a '#' in the position before
-			for (int i = 0; i < word.length(); i++)
-			{
+			for (int i = 0; i < word.length(); i++) {
 				board.at(line).at(column) = word[i]; // inserts the word by changing the vector board
 				line++;
 			};
@@ -73,8 +71,7 @@ void Board::insertWord(string position, string word)
 		if (orientation == 'H' && wordMatchesSpace(line, column, orientation, word)) { // insert HORIZONTAL words, if the word matches the space
 			if (column != 0)
 				board.at(line).at(column - 1) = '#'; // If the word is not being inserted in the beginning of a  places a '#' in the position before
-			for (int i = 0; i < word.length(); i++)
-			{
+			for (int i = 0; i < word.length(); i++) {
 				board.at(line).at(column) = word[i]; // inserts the word by changing the vector board
 				column++;
 			};
@@ -263,6 +260,8 @@ void Board::saveBoard(string dictionaryFileName)
 void Board::saveFinalBoard(string dictionaryFileName) // Igual a save board mas o nome vai ser criado sozinho 
 {
 	ofstream boardFile; 
+
+	cout << "File will be saved into a text file (enter only the name of the file): ";
 
 	string fileName;
 	cin >> fileName;   // AQUI!!! ex. b001.txt        001 -> static

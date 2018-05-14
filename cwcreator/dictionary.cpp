@@ -64,16 +64,6 @@ bool Dictionary::isValid(string word) { // Verifica se uma palavra pertence ao d
 		return true;
 	else
 		return false;
-
-	/*
-	for (int i = 0; i <= synonymes.size(); i++)
-	{
-		if (i == synonymes.size()) // Acabou o vetor
-			return false;
-		else if (word == synonymes[i][0]) // Se a word for igual a primeira palavra de cada vetor
-			return true;
-	}
-	*/
 }
 
 vector<string> Dictionary::wildcard(string pseudoWord) { // Recebe parte de uma palavra e devolve um vetor com todas as palavras que podem ser escritas
