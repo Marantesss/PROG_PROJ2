@@ -64,6 +64,7 @@ bool Dictionary::isValid(string word) { // Verifica se uma palavra pertence ao d
 		return true;
 	else
 		return false;
+
 	/*
 	for (int i = 0; i <= synonymes.size(); i++)
 	{

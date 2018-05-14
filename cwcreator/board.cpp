@@ -235,12 +235,13 @@ void Board::saveBoard(string dictionaryFileName)
 {
 	ofstream boardFile;
 	
-	cout << "File will be saved into a text file (enter only the name of the file)  ";
+	cout << "File will be saved into a text file (enter only the name of the file): ";
 	string fileName;
 	cin >> fileName;
 
 	fileName += ".txt"; 
 	boardFile.open(fileName); // Opens the file 
+
 	
 	boardFile << dictionaryFileName << endl;  // 1st line contains the name of the dictionary file
 

@@ -115,7 +115,7 @@ void Puzzle::puzzleOperations(Board b, Dictionary dic) {
 
 	int option;
 	cout << endl << "OPTIONS \n";
-	cout << "1- Save and resume later  " << "2- Finish" << endl;
+	cout << "1- Save and resume later \n" << "2- Finish" << endl;
 
 	do {
 		cin >> option;
