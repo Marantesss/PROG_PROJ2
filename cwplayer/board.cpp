@@ -1,5 +1,5 @@
 #include "board.h"
-#include "puzzle.h"
+//#include "puzzle.h"
 #include <vector>
 #include <iostream>
 #include <utility>
@@ -328,4 +328,14 @@ vector<char> Board::loadBoardLine(string &line)
 	numLines++;
 
 	return boardLine;
+}
+
+void Board::emptyGrid()
+{
+	for (int i = 0; i < numLines; i++)
+	{
+		for (int j = 0; j < numColumns; j++)
+			if (board.at(i).at(j) != '#')
+				board.at(i).at(j) = '.';
+	}
 }

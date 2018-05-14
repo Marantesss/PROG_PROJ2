@@ -20,6 +20,7 @@ public:
 	void saveBoard(string dictionaryFileName);
 	void saveFinalBoard(string dictionaryFileName);
 	void loadBoard(string fileName);
+	void emptyGrid();
 private:
 	int numColumns; // Numero de colunas
 	int numLines; // Numero de linhas

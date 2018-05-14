@@ -54,7 +54,7 @@ int Puzzle::createPuzzle() {
 		cout << "Dictionary file name ? ";
 		cin >> dictionaryFile_name;
 
-		dictionaryFileName = dictionaryFile_name;
+		dictionaryFileName = dictionaryFile_name; // VER SE E NECESSARIO
 
 		dicFile.open(dictionaryFile_name); // Abre ficheiro de input
 
@@ -144,14 +144,15 @@ int Puzzle::resumePuzzle() { // Resume a criacao de um puzzle
 
 	crossFile.open(crosswordsFile_name);
 	
-	getline(crossFile, dictionaryFileName);
+	getline(crossFile, dictionaryFile_name);
+	dictionaryFileName = dictionaryFile_name;
 
-	
+	Dictionary dic(dictionaryFile_name);
 	Board b(0,0);
-	
+
 	b.loadBoard(crosswordsFile_name);
 	b.showBoard();
-	puzzleOperations(b);
+	puzzleOperations(b, dic);
 
 	return 0;
 }
