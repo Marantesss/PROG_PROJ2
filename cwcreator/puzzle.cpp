@@ -92,7 +92,7 @@ void Puzzle::puzzleOperations(Board b, Dictionary dic) {
 	while (true) {
 		cout << endl << "Position ('LCD' / CTRL-Z = stop)? ";
 		cin >> position;
-		if (cin.fail()) // Acaba o ciclo se fizer CTRL+Z
+		if (cin.fail()) // Ends if entered CTRL+Z
 			if (cin.eof()) {
 				cin.clear();
 				break;
@@ -101,12 +101,12 @@ void Puzzle::puzzleOperations(Board b, Dictionary dic) {
 		cin.ignore(1000, '\n');
 		cout << "Word? ";
 		cin >> word;
-		if (word == "?")
+		if (word == "?")  // Help input
 			cout << "help";
-		else if (word == "-")
+		else if (word == "-") // Remove word input
 			b.removeWord(position);
-		else{
-			//dic.isValid(word);
+		else { // Insert word input
+			dic.isValid(word);
 			b.insertWord(position, word);
 		}
 		b.showBoard();
@@ -145,7 +145,7 @@ int Puzzle::resumePuzzle() { // Resume a criacao de um puzzle
 	crossFile.open(crosswordsFile_name);
 	
 	getline(crossFile, dictionaryFile_name); // Extracts the name of the dictionary file
-	dictionaryFileName = dictionaryFile_name;
+	dictionaryFileName = dictionaryFile_name; // Puzzle class variable used to save the board
 
 	Dictionary dic(dictionaryFile_name);
 	Board b(0,0);

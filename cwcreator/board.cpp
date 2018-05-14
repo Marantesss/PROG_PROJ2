@@ -97,7 +97,7 @@ int Board::getIndex(char letter) // Gets the index of a given letter of line or 
 }
 
 bool Board::wordFitsSpace(int const &line, int const &column, char const &orientation, string const &word) 
-// Checks if the word fits the column/line starting from the user entered position
+// Checks if the word fits the column/line starting from the user entered position until the end of the column/line
 {
 	if (orientation == 'V')
 	{
@@ -124,8 +124,9 @@ bool Board::wordMatchesSpace(int const &line, int const &column, char const &ori
 		if (line != 0)
 			if (board.at(movingBoardVariable - 1).at(column) != '.' && board.at(movingBoardVariable - 1).at(column) != '#') 
 				return false; // If the char before is not '.' or '#' returns false
-
-		// verificaçao da letra seguinte
+		if (movingBoardVariable + word.length() < getLines())
+			if (board.at(movingBoardVariable + word.length()).at(column) != '.' && board.at(movingBoardVariable + word.length()).at(column) != '#')
+				return false; // If the char after is not '.' or '#' returns false
 
 		for (int i = 0; i < word.length(); i++)
 		{
@@ -133,12 +134,12 @@ bool Board::wordMatchesSpace(int const &line, int const &column, char const &ori
 			{
 				if (board.at(movingBoardVariable).at(column) != toupper(word[i])) // If the word letter is different from the board letter returns false
 					return false;
-				pair<int, int> dontRemove = make_pair(movingBoardVariable, column); // Crossover letters
+				pair<int, int> dontRemove = make_pair(movingBoardVariable, column); // if the Crossover letters match add the coordinate to a vector of pairs
 				temporaryNonRemovableLetters.push_back(dontRemove);
 			}
 			movingBoardVariable++;
 		}
-		nonRemovableLetters.insert(nonRemovableLetters.end(), temporaryNonRemovableLetters.begin(), temporaryNonRemovableLetters.end()); // If the path leaves the loop adds the crossover letters to a vector
+		nonRemovableLetters.insert(nonRemovableLetters.end(), temporaryNonRemovableLetters.begin(), temporaryNonRemovableLetters.end()); // If the path leaves the loop FOR adds the (temporary vector of) crossover letters to a vector
 		return true;
 	}
 	
@@ -147,6 +148,9 @@ bool Board::wordMatchesSpace(int const &line, int const &column, char const &ori
 		movingBoardVariable = column;
 		if (column != 0)
 			if (board.at(line).at(movingBoardVariable - 1) != '.' && board.at(line).at(movingBoardVariable - 1) != '#')
+				return false;
+		if (movingBoardVariable + word.length() < getLines())
+			if (board.at(line).at(movingBoardVariable + word.length()) != '.' && board.at(line).at(movingBoardVariable + word.length()) != '#')
 				return false;
 
 		for (int i = 0; i < word.length(); i++)
@@ -173,33 +177,33 @@ void Board::removeWord(string position)
 	column = getIndex(toupper(position[1]));
 	char orientation = toupper(position[2]);
 
-	if (orientation == 'V')
+	if (orientation == 'V') // VERTICAL words
 	{
-		if (line != 0)
+		if (line != 0) // If the word stars in the middle of the line changes the '#' to a '.'
 			board.at(line - 1).at(column) = '.';
 		
-		while (board.at(line).at(column) != '#' && line < getLines())
+		while (board.at(line).at(column) != '#' && line < getLines()) 
 		{
-			if (!isInNonRemovable(line, column)) // isNonRemovable gets line and column;
+			if (!isInNonRemovable(line, column)) // If the letter is NOT a crossover letter changes the letter to a '.'
 				board.at(line).at(column) = '.';
 			line++;
 		}
-		if (line < getLines())
+		if (line < getLines()) // If the word ends in the middle of the line changes the '#' to a '.'
 			board.at(line).at(column) = '.';
 	}
 
-	if (orientation == 'H')
+	if (orientation == 'H') // HORIZONTAL words
 	{
-		if (column != 0)
+		if (column != 0) // If the word stars in the middle of the column changes the '#' to a '.'
 			board.at(line).at(column-1) = '.';
 
 		while (board.at(line).at(column) != '#' && column < getColumns())
 		{
-			if (!isInNonRemovable(line, column)) // isNonRemovable gets line and column;
+			if (!isInNonRemovable(line, column)) // If the letter is NOT a crossover letter changes the letter to a '.'
 				board.at(line).at(column) = '.';
 			column++;
 		}
-		if (column < getColumns())
+		if (column < getColumns()) // If the word stars in the middle of the column changes the '#' to a '.'
 			board.at(line).at(column) = '.';
 	}
 	for (int i = 0; i < position_words.size(); i++) // Removes the position and the word from the vector 
@@ -212,7 +216,7 @@ bool Board::isInNonRemovable(int line, int column)
 	for (int i = 0; i < nonRemovableLetters.size(); i++) // Checks if the pair is in the nonRemovableLetters 
 		if (nonRemovableLetters.at(i).first == line && nonRemovableLetters.at(i).second == column)
 		{
-			nonRemovableLetters.erase(nonRemovableLetters.begin() + i); // If so removes that pair 
+			nonRemovableLetters.erase(nonRemovableLetters.begin() + i); // If so removes that pair because the letter is no longer a crossover letter
 			return true;
 		}
 	return false;
@@ -236,11 +240,11 @@ void Board::saveBoard(string dictionaryFileName)
 	cin >> fileName;
 
 	fileName += ".txt"; 
-	boardFile.open(fileName);
+	boardFile.open(fileName); // Opens the file 
 	
-	boardFile << dictionaryFileName << endl;
+	boardFile << dictionaryFileName << endl;  // 1st line contains the name of the dictionary file
 
-	for (int i = 0; i < numLines; i++)
+	for (int i = 0; i < numLines; i++) // Saves the (vector) board
 	{
 		boardFile << endl;
 		for (int j = 0; j < numColumns; j++)
@@ -249,18 +253,18 @@ void Board::saveBoard(string dictionaryFileName)
 
 	boardFile << endl;
 
-	for (int i = 0; i < position_words.size(); i++)
+	for (int i = 0; i < position_words.size(); i++) // Saves the position and the respective words
 	{
 		boardFile << endl;
 		boardFile << position_words.at(i).first << " " << position_words.at(i).second;
 	}
 }
-void Board::saveFinalBoard(string dictionaryFileName)
+void Board::saveFinalBoard(string dictionaryFileName) // Igual a save board mas o nome vai ser criado sozinho 
 {
-	ofstream boardFile;
+	ofstream boardFile; 
 
 	string fileName;
-	cin >> fileName;
+	cin >> fileName;   // AQUI!!! ex. b001.txt        001 -> static
 
 	fileName += ".txt";
 	boardFile.open(fileName);
@@ -283,53 +287,50 @@ void Board::saveFinalBoard(string dictionaryFileName)
 	}
 }
 
-
 void Board::loadBoard(string fileName)
 {
 	ifstream boardFile;
 	string line;
 
-	boardFile.open(fileName);
-	
+	boardFile.open(fileName);  // File to load 
 	if (!boardFile.is_open())
 		cout << "Couldn't open the file";
 
+	// Dictionary file name is loaded in the outside of the class Board (in the class Puzzle)
 	getline(boardFile, line);
-	boardFile.seekg(line.length() + 4); // moves the pointer to the line containing
+	boardFile.seekg(line.length() + 4); // Moves the pointer to the line before of the beggining of the board
 	
 	getline(boardFile, line);
 
-	while (!boardFile.eof())
+	while (!boardFile.eof()) // Loads the letters to the vector board
 	{
-		board.push_back(loadBoardLine(line));
+		board.push_back(loadBoardLine(line)); // Loads a line of the board
 		getline(boardFile, line);
-		if (line == "\n" || line == "")
+		if (line == "\n" || line == "") // Stops when the board ends
 			break;
 	}
 	
-	while (!boardFile.eof())
+	while (!boardFile.eof()) // Loads the positions and the words to a vector of pairs
 	{
 		string position, word;
 		getline(boardFile, line);
 		
-		position = line.substr(0, 3);
-		word = line.substr(4);
+		position = line.substr(0, 3); // Position are the first 3 letters
+		word = line.substr(4); // Words are the remaining letters
 
-		position_words.push_back(make_pair(position, word));
+		position_words.push_back(make_pair(position, word)); // Makes a pair of (position-word)
 	}
-
-
 }
 
 vector<char> Board::loadBoardLine(string &line)
 {
 	vector<char> boardLine;
-	for (int i = 0; i < line.length(); i++)
+	for (int i = 0; i < line.length(); i++) // Puts the letters or '.' in a vector that represents a line of the board
 		if (line[i] != ' ' && line[i] != '\n')
 			boardLine.push_back(line[i]);
 	
-	numColumns = boardLine.size();
+	numColumns = boardLine.size(); // Refreshes the number of lines and columns
 	numLines++;
 
-	return boardLine;
+	return boardLine; // Returns a line of the board
 }
