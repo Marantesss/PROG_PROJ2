@@ -81,12 +81,12 @@ int Puzzle::createPuzzle() {
 	cout << endl;
 	b.showBoard();
 
-	puzzleOperations(b);
+	puzzleOperations(b, dic);
 
 	return 0;
 }
 
-void Puzzle::puzzleOperations(Board b) {
+void Puzzle::puzzleOperations(Board b, Dictionary dic) { 
 	string position, word;
 		
 	while (true) {
@@ -101,8 +101,14 @@ void Puzzle::puzzleOperations(Board b) {
 		cin.ignore(1000, '\n');
 		cout << "Word? ";
 		cin >> word;
-
-		b.insertWord(position, word);
+		if (word == "?")
+			cout << "help";
+		else if (word == "-")
+			b.removeWord(position);
+		else{
+			//dic.isValid(word);
+			b.insertWord(position, word);
+		}
 		b.showBoard();
 		cout << endl;
 	}

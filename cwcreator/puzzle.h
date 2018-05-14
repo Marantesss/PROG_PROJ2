@@ -12,7 +12,7 @@ class Puzzle
 public:
 	Puzzle();
 	int createPuzzle();
-	void puzzleOperations(Board b);
+	void puzzleOperations(Board b, Dictionary dic);
 	int resumePuzzle();
 private:
 	string dictionaryFileName;
