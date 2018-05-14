@@ -81,7 +81,7 @@ void Board::insertWord(string position, string word)
 			if (column < getColumns() - 1)
 				board.at(line).at(column) = '#'; // If the word does not end in the last position of a line places a '#' in the next position
 		}
-		if (!wordMatchesSpace(line, column, orientation, word)) 
+		if (!(wordMatchesSpace(line, column, orientation, word))) 
 			cerr << "The word does not match the space" << endl; // displays error message if the word does not match the space
 
 	}
