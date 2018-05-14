@@ -297,10 +297,11 @@ void Board::loadBoard(string fileName)
 
 	while (!boardFile.eof())
 	{
+		if (line == "\n")
+			break;
 		board.push_back(loadBoardLine(line));
 		getline(boardFile, line);
-		if (line == "\n") 
-			break;
+		
 	}
 	
 	while (!boardFile.eof())

@@ -81,8 +81,8 @@ void Board::insertWord(string position, string word)
 			if (column < getColumns() - 1)
 				board.at(line).at(column) = '#';
 		}
-		else
-			cerr << "The word does not match the space" << endl;
+		if (!wordMatchesSpace(line, column, orientation, word))
+			cerr << "The word does not match the space" << endl; // erro aqui
 
 	}
 	else
@@ -299,7 +299,7 @@ void Board::loadBoard(string fileName)
 	{
 		board.push_back(loadBoardLine(line));
 		getline(boardFile, line);
-		if (line == "\n") 
+		if (line == "\n" && line == "")
 			break;
 	}
 	
