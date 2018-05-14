@@ -35,15 +35,15 @@ int Board::getLines() const
 void Board::showBoard() 
 {
 	
-	for (int i = 0; i < numColumns + 1; i++)
-		cout << lowerLetters.at(i) << "  ";
+	for (int i = 0; i < numColumns + 1; i++)  // Prints the upper line with the column identifiers
+		cout << lowerLetters.at(i) << "  ";   // stored in the vector lowerletters
 
 	for (int i = 0; i < numLines; i++)
 	{
 		cout << endl;
-		cout << upperLetters.at(i) << "  ";
+		cout << upperLetters.at(i) << "  ";  // Prints the identifier for each line
 		for (int j = 0; j < numColumns; j++)
-			cout << board.at(i).at(j) << "  "; // 
+			cout << board.at(i).at(j) << "  "; // Prints each position of the board stored in board
 	}
 	cout << endl;
 }
@@ -54,53 +54,54 @@ void Board::insertWord(string position, string word)
 	line = getIndex(toupper(position[0]));
 	column = getIndex(toupper(position[1]));
 	char orientation = toupper(position[2]);
-	transform(word.begin(), word.end(), word.begin(), ::toupper); // Transforma a word em maiscula
+	transform(word.begin(), word.end(), word.begin(), ::toupper); // Changes the word to uppercase
 
 	if (wordFitsSpace(line, column, orientation, word))
 	{
-		if (orientation == 'V' && wordMatchesSpace(line, column, orientation, word)) {
+		if (orientation == 'V' && wordMatchesSpace(line, column, orientation, word)) { // insert VERTICAL words, if the word matches the space
 			if (line != 0)
-				board.at(line - 1).at(column) = '#';
+				board.at(line - 1).at(column) = '#'; // If the word is not being inserted in the beginning of a column places a '#' in the position before
 			for (int i = 0; i < word.length(); i++)
 			{
-				board.at(line).at(column) = toupper(word[i]);
+				board.at(line).at(column) = word[i]; // inserts the word by changing the vector board
 				line++;
 			};
-			if (line < getLines() - 1)
-				board.at(line).at(column) = '#';
+			if (line < getLines() - 1) 
+				board.at(line).at(column) = '#'; // If the word does not end in the last position of a column places a '#' in the next position
 		}
 
-		if (orientation == 'H' && wordMatchesSpace(line, column, orientation, word)) {
+		if (orientation == 'H' && wordMatchesSpace(line, column, orientation, word)) { // insert HORIZONTAL words, if the word matches the space
 			if (column != 0)
-				board.at(line).at(column - 1) = '#';
+				board.at(line).at(column - 1) = '#'; // If the word is not being inserted in the beginning of a  places a '#' in the position before
 			for (int i = 0; i < word.length(); i++)
 			{
-				board.at(line).at(column) = toupper(word[i]);
+				board.at(line).at(column) = word[i]; // inserts the word by changing the vector board
 				column++;
 			};
 			if (column < getColumns() - 1)
-				board.at(line).at(column) = '#';
+				board.at(line).at(column) = '#'; // If the word does not end in the last position of a line places a '#' in the next position
 		}
-		if (!wordMatchesSpace(line, column, orientation, word))
-			cerr << "The word does not match the space" << endl; // erro aqui
+		if (!wordMatchesSpace(line, column, orientation, word)) 
+			cerr << "The word does not match the space" << endl; // displays error message if the word does not match the space
 
 	}
 	else
-		cerr << "The word does not fit the space" << endl;
+		cerr << "The word does not fit the space" << endl; // displays error message if the word does not fit the space
 
-	position_words.push_back(make_pair(position, word));
+	position_words.push_back(make_pair(position, word)); // Adds a pair of (position - word) to a vector
 }
 
-int Board::getIndex(char letter)
+int Board::getIndex(char letter) // Gets the index of a given letter of line or column 
 {
 	return (int)letter - 65;
 }
 
-bool Board::wordFitsSpace(int const &line, int const &column, char const &orientation, string const &word)
+bool Board::wordFitsSpace(int const &line, int const &column, char const &orientation, string const &word) 
+// Checks if the word fits the column/line starting from the user entered position
 {
 	if (orientation == 'V')
 	{
-		if (getLines() - line >= word.length())
+		if (getLines() - line >= word.length()) 
 			return true;
 		else return false;
 	}
@@ -113,6 +114,7 @@ bool Board::wordFitsSpace(int const &line, int const &column, char const &orient
 }
 
 bool Board::wordMatchesSpace(int const &line, int const &column, char const &orientation, string const &word)
+// Cheks if the word matches with the already in-board letters
 {
 	vector<pair<int, int>> temporaryNonRemovableLetters;
 	int movingBoardVariable;
@@ -120,21 +122,23 @@ bool Board::wordMatchesSpace(int const &line, int const &column, char const &ori
 	{
 		movingBoardVariable = line;
 		if (line != 0)
-			if (board.at(movingBoardVariable - 1).at(column) != '.' && board.at(movingBoardVariable - 1).at(column) != '#')
-				return false;
+			if (board.at(movingBoardVariable - 1).at(column) != '.' && board.at(movingBoardVariable - 1).at(column) != '#') 
+				return false; // If the char before is not '.' or '#' returns false
+
+		// verificaçao da letra seguinte
 
 		for (int i = 0; i < word.length(); i++)
 		{
-			if (board.at(movingBoardVariable).at(column) != '.')  // ADD  PALAVRAS (LETRAS/POSICOES QUE COINCIDEM) ()
+			if (board.at(movingBoardVariable).at(column) != '.')  
 			{
-				if (board.at(movingBoardVariable).at(column) != toupper(word[i]))
+				if (board.at(movingBoardVariable).at(column) != toupper(word[i])) // If the word letter is different from the board letter returns false
 					return false;
-				pair<int, int> dontRemove = make_pair(movingBoardVariable, column);
+				pair<int, int> dontRemove = make_pair(movingBoardVariable, column); // Crossover letters
 				temporaryNonRemovableLetters.push_back(dontRemove);
 			}
 			movingBoardVariable++;
 		}
-		nonRemovableLetters.insert(nonRemovableLetters.end(), temporaryNonRemovableLetters.begin(), temporaryNonRemovableLetters.end());
+		nonRemovableLetters.insert(nonRemovableLetters.end(), temporaryNonRemovableLetters.begin(), temporaryNonRemovableLetters.end()); // If the path leaves the loop adds the crossover letters to a vector
 		return true;
 	}
 	
@@ -299,7 +303,7 @@ void Board::loadBoard(string fileName)
 	{
 		board.push_back(loadBoardLine(line));
 		getline(boardFile, line);
-		if (line == "\n" && line == "")
+		if (line == "\n" || line == "")
 			break;
 	}
 	

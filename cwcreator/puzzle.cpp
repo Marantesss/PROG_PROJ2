@@ -86,7 +86,7 @@ int Puzzle::createPuzzle() {
 	return 0;
 }
 
-void Puzzle::puzzleOperations(Board b, Dictionary dic) { 
+void Puzzle::puzzleOperations(Board b, Dictionary dic) {
 	string position, word;
 		
 	while (true) {
@@ -144,7 +144,7 @@ int Puzzle::resumePuzzle() { // Resume a criacao de um puzzle
 
 	crossFile.open(crosswordsFile_name);
 	
-	getline(crossFile, dictionaryFile_name);
+	getline(crossFile, dictionaryFile_name); // Extracts the name of the dictionary file
 	dictionaryFileName = dictionaryFile_name;
 
 	Dictionary dic(dictionaryFile_name);
