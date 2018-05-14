@@ -11,7 +11,7 @@ Puzzle::Puzzle()
 	cout << "=======================================" << endl << endl;
 
 	cout << "INSTRUCTIONS:" << endl;
-	//cout << "Mais instrucoes que nao sei..." << endl; 
+	cout << "Input '?' anytime to get help" << endl; 
 	cout << "Position (LCD / CTRL-Z = stop )" << endl;
 	cout << "LCD stands for Line Column and Direction" << endl;
 	//cout << "Mais instrucoes que nao sei..." << endl; 
@@ -72,7 +72,7 @@ int Puzzle::createPuzzle() {
 		cin >> lin >> col;
 
 		if (cin.fail()) { // Se o ficheiro de input nao estiver aberto
-			cout << "Couldn't open the file" << endl;
+			cout << "Wrong input... Please insert two integers separated by space" << endl;
 		}
 	} while (cin.fail());
 
@@ -111,7 +111,9 @@ void Puzzle::puzzleOperations(Board b, Dictionary dic) {
 		cin.ignore(1000, '\n');
 		if (word == "?") {  // Help input
 			cout << "=== HELP ===" << endl;
-			cout << "Enter a word (if its not in the dictionary you can try again)" << endl << endl;
+			cout << "Enter a word to be added to the crossword board (if its not in the dictionary you can try again)" << endl << endl;
+			cout << "Word? ";
+			cin >> word;
 		}
 		if (word == "-") // Remove word input
 			b.removeWord(position);
