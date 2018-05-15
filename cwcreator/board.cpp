@@ -35,19 +35,30 @@ int Board::getLines() const
 
 void Board::showBoard() 
 {
-	
+	setcolor(12); // First line of letters is lightred
 	for (int i = 0; i < numColumns + 1; i++)  // Prints the upper line with the column identifiers
 		cout << lowerLetters.at(i) << "  ";   // stored in the vector lowerletters
 
 	for (int i = 0; i < numLines; i++)
 	{
-		setcolor(4, 12);
 		cout << endl;
+		setcolor(12); // First column of letters is lightred
 		cout << upperLetters.at(i) << "  ";  // Prints the identifier for each line
-		for (int j = 0; j < numColumns; j++)
-			cout << board.at(i).at(j) << "  "; // Prints each position of the board stored in board
+		for (int j = 0; j < numColumns; j++) {
+			if (board.at(i).at(j) == '#') { // Checks if the char being printed is '#'
+				setcolor(7, 0); // Change the color of the letters 7=LIGHTGRAY and background 0=BLACK
+				cout << board.at(i).at(j);
+				setcolor(0, 12);
+				cout << "  "; // Prints each position of the board stored in board
+			}
+			else {
+				setcolor(0, 12); // Change the color of the letters 4=RED and background 12=LIGTHRED
+				cout << board.at(i).at(j) << "  "; // Prints each position of the board stored in board
+			}
+		}
 	}
 	cout << endl;
+	setcolor(7, 0); // Change back to normal (15=LIGHTGRAY letters, 0=BLACK background)
 }
 
 void Board::insertWord(string position, string word)

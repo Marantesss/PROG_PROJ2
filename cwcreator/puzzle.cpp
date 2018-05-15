@@ -73,6 +73,8 @@ int Puzzle::createPuzzle() {
 
 		if (cin.fail()) { // Se o ficheiro de input nao estiver aberto
 			cout << "Wrong input... Please insert two integers separated by space" << endl;
+			cin.clear(); // Limpa a errorFlag
+			cin.ignore(1000, '\n'); // Ignora tudo o que esta para a frente da palavra inicial para evitar erros
 		}
 	} while (cin.fail());
 
@@ -101,17 +103,19 @@ void Puzzle::puzzleOperations(Board b, Dictionary dic) {
 		if (cin.fail()) // Ends if entered CTRL+Z
 			if (cin.eof()) {
 				cin.clear();
+				cin.ignore(1000, '\n');
 				break;
 			}
 		cin.clear();
 		cin.ignore(1000, '\n');
-		cout << "Word (? = help)? ";
+		cout << "Word (? = help / - = remove word)? ";
 		cin >> word;
 		cin.clear();
 		cin.ignore(1000, '\n');
 		if (word == "?") {  // Help input
 			cout << "=== HELP ===" << endl;
-			cout << "Enter a word to be added to the crossword board (if its not in the dictionary you can try again)" << endl << endl;
+			cout << "Enter a word to be added to the crossword board (if its not in the dictionary you can try again)" << endl;
+			cout << "Enter '-' to delete the word starting in the chosen position" << endl;
 			cout << "Word? ";
 			cin >> word;
 		}
