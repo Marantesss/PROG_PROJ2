@@ -9,6 +9,7 @@
 using namespace std;
 
 class Board {
+	friend bool isValidPosition(Board b, string position);
 public:
 	Board(int lines, int columns); // Atualiza o numero de colunas de linhas
 	int getColumns() const; // Devolve o numero de colunas
@@ -16,16 +17,15 @@ public:
 	void showBoard(); // Da print ao tabuleiro
 	void insertWord(string position, string word);
 	void removeWord(string position);
-	void finalizeBoard();
-	void saveBoard(string dictionaryFileName);
-	void saveFinalBoard(string dictionaryFileName);
 	void loadBoard(string fileName);
 	void emptyGrid();
+	vector<pair<string, string>> getBoardWords();
 private:
 	int numColumns; // Numero de colunas
 	int numLines; // Numero de linhas
 	vector<vector<char>> board;
 	vector<pair<string, string>> position_words;
+	vector<pair<string, string>> position_wordsPLAYER;
 	vector<char> upperLetters = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
 	vector<char> lowerLetters = {' ','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 	vector<pair<int, int>> nonRemovableLetters;
