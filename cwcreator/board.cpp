@@ -1,6 +1,7 @@
 #include "board.h"
 #include "puzzle.h"
 #include "colors.h"
+#include "puzzle.h"
 #include <vector>
 #include <iostream>
 #include <utility>
@@ -70,6 +71,8 @@ void Board::insertWord(string position, string word)
 	transform(word.begin(), word.end(), word.begin(), ::toupper); // Changes the word to uppercase
 
 	if (wordFitsSpace(line, column, orientation, word)) {
+		if (!(wordMatchesSpace(line, column, orientation, word)))
+			cerr << "The word does not match the space" << endl; // displays error message if the word does not match the space
 		if (orientation == 'V' && wordMatchesSpace(line, column, orientation, word)) { // insert VERTICAL words, if the word matches the space
 			if (line != 0)
 				board.at(line - 1).at(column) = '#'; // If the word is not being inserted in the beginning of a column places a '#' in the position before
@@ -91,8 +94,6 @@ void Board::insertWord(string position, string word)
 			if (column < getColumns())
 				board.at(line).at(column) = '#'; // If the word does not end in the last position of a line places a '#' in the next position
 		}
-		if (!(wordMatchesSpace(line, column, orientation, word))) 
-			cerr << "The word does not match the space" << endl; // displays error message if the word does not match the space
 
 	}
 	else
@@ -244,10 +245,10 @@ void Board::finalizeBoard()
 void Board::saveBoard(string dictionaryFileName)
 {
 	ofstream boardFile;
-	
-	cout << "File will be saved into a text file (enter only the name of the file): ";
+	//if (crossFile.is_open()) { // Checks if the ifstream file is opened, if it is, then the board was resumed and will be saved with the same name
+	//}
+	cout << "File will be saved into a text file...";
 	string fileName;
-	cin >> fileName;
 
 	fileName += ".txt"; 
 	boardFile.open(fileName); // Opens the file 
@@ -277,7 +278,7 @@ void Board::saveFinalBoard(string dictionaryFileName) // Igual a save board mas 
 	cout << "File will be saved into a text file (enter only the name of the file): ";
 
 	string fileName;
-	cin >> fileName;   // AQUI!!! ex. b001.txt        001 -> static
+	cin >> fileName;
 
 	fileName += ".txt";
 	boardFile.open(fileName);
