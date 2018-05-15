@@ -103,7 +103,6 @@ void Puzzle::puzzleOperations(Board b, Dictionary dic) {
 		if (cin.fail()) // Ends if entered CTRL+Z
 			if (cin.eof()) {
 				cin.clear();
-				cin.ignore(1000, '\n');
 				break;
 			}
 		cin.clear();
@@ -150,7 +149,7 @@ void Puzzle::puzzleOperations(Board b, Dictionary dic) {
 
 int Puzzle::resumePuzzle() { // Resume a criacao de um puzzle
 	string dictionaryFile_name, crosswordsFile_name;
-	ifstream dicFile, crossFile;
+	ifstream dicFile;
 
 	cout << "---------------------------------------" << endl << "RESUME PUZZLE" << endl << "---------------------------------------" << endl;
 
@@ -169,5 +168,6 @@ int Puzzle::resumePuzzle() { // Resume a criacao de um puzzle
 	b.showBoard();
 	puzzleOperations(b, dic);
 
+	crossFile.close();
 	return 0;
 }

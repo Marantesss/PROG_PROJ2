@@ -33,6 +33,7 @@ private:
 	int getIndex(char letter);
 	bool isInNonRemovable(int line, int colunms);
 	vector<char> loadBoardLine(string &line);
+	int boardNameCounter = 1; // Contador do numero de tabuleiros que foram criados num run
 };
 
 #endif

@@ -16,6 +16,7 @@ public:
 	int resumePuzzle();
 private:
 	string dictionaryFileName;
+	ifstream crossFile; // File opened to resume puzzle creation
 };
 
 #endif
