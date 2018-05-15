@@ -1,5 +1,6 @@
 #include "board.h"
 #include "puzzle.h"
+#include "colors.h"
 #include <vector>
 #include <iostream>
 #include <utility>
@@ -40,6 +41,7 @@ void Board::showBoard()
 
 	for (int i = 0; i < numLines; i++)
 	{
+		setcolor(4, 12);
 		cout << endl;
 		cout << upperLetters.at(i) << "  ";  // Prints the identifier for each line
 		for (int j = 0; j < numColumns; j++)
@@ -64,7 +66,7 @@ void Board::insertWord(string position, string word)
 				board.at(line).at(column) = word[i]; // inserts the word by changing the vector board
 				line++;
 			};
-			if (line < getLines() - 1) 
+			if (line < getLines()) 
 				board.at(line).at(column) = '#'; // If the word does not end in the last position of a column places a '#' in the next position
 		}
 
@@ -75,7 +77,7 @@ void Board::insertWord(string position, string word)
 				board.at(line).at(column) = word[i]; // inserts the word by changing the vector board
 				column++;
 			};
-			if (column < getColumns() - 1)
+			if (column < getColumns())
 				board.at(line).at(column) = '#'; // If the word does not end in the last position of a line places a '#' in the next position
 		}
 		if (!(wordMatchesSpace(line, column, orientation, word))) 
