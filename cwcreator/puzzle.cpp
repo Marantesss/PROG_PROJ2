@@ -3,6 +3,13 @@
 
 using namespace std;
 
+/*
+PROBLEMAS:
+1 - Não dá para eliminar palavras escritas na vertical, mas na horizontal ja da
+2 - (RESOLVIDO) Palavras validas que sao inseridas mas que nao cabem no board são na mesma adicionadas ao vetor position_word 
+*/
+
+
 Puzzle::Puzzle()
 {
 	int option = -1;

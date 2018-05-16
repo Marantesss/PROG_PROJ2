@@ -94,12 +94,10 @@ void Board::insertWord(string position, string word)
 			if (column < getColumns())
 				board.at(line).at(column) = '#'; // If the word does not end in the last position of a line places a '#' in the next position
 		}
-
+		position_words.push_back(make_pair(position, word)); // Adds a pair of (position - word) to a vector
 	}
 	else
 		cerr << "The word does not fit the space" << endl; // displays error message if the word does not fit the space
-
-	position_words.push_back(make_pair(position, word)); // Adds a pair of (position - word) to a vector
 }
 
 bool Board::wordRepeated(string word) // Checks if an inserted word was already inserted before
