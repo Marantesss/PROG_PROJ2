@@ -102,6 +102,15 @@ void Board::insertWord(string position, string word)
 	position_words.push_back(make_pair(position, word)); // Adds a pair of (position - word) to a vector
 }
 
+bool Board::wordRepeated(string word) // Checks if an inserted word was already inserted before
+{
+	transform(word.begin(), word.end(), word.begin(), ::toupper); // Changes the word to uppercase
+	for (int i = 0; i < position_words.size(); i++) // Removes the position and the word from the vector 
+		if (position_words.at(i).second == word)
+			return true;
+	return false;
+}
+
 int Board::getIndex(char letter) // Gets the index of a given letter of line or column 
 {
 	return (int)letter - 65;
@@ -179,7 +188,6 @@ bool Board::wordMatchesSpace(int const &line, int const &column, char const &ori
 		return true;
 	}
 }
-
 
 void Board::removeWord(string position)
 {
