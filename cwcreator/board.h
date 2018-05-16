@@ -21,6 +21,7 @@ public:
 	void saveFinalBoard(string dictionaryFileName);
 	void loadBoard(string fileName);
 	bool wordRepeated(string word); // Checks if an inserted word was already inserted before
+	string getWildcardWord(string position); // Returns a pseudoword (with '?' and '*')
 private:
 	int numColumns; // Numero de colunas
 	int numLines; // Numero de linhas

@@ -99,4 +99,3 @@ bool Dictionary::wildcardMatch(const char *str, const char *strWild) { // Funcao
 	}
 	return !*str && !*strWild;
 }
-

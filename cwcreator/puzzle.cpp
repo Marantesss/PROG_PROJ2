@@ -3,13 +3,6 @@
 
 using namespace std;
 
-/*
-PROBLEMAS:
-1 - Não dá para eliminar palavras escritas na vertical, mas na horizontal ja da
-2 - (RESOLVIDO) Palavras validas que sao inseridas mas que nao cabem no board são na mesma adicionadas ao vetor position_word 
-*/
-
-
 Puzzle::Puzzle()
 {
 	int option = -1;
@@ -21,7 +14,7 @@ Puzzle::Puzzle()
 	cout << "Input '?' anytime to get help" << endl; 
 	cout << "Position (LCD / CTRL-Z = stop )" << endl;
 	cout << "LCD stands for Line Column and Direction" << endl;
-	//cout << "Mais instrucoes que nao sei..." << endl; 
+	cout << "Example: CbH stands for line C, column b and horizontal direction" << endl; 
 	cout << endl; // TEMPORARIO
 	cout << "---------------------------------------" << endl << endl;
 	while (option != 0) {
@@ -96,8 +89,9 @@ int Puzzle::createPuzzle() {
 }
 
 void Puzzle::puzzleOperations(Board b, Dictionary dic) {
-	string position, word;
-		
+	string position, word, pseudoWord;
+	vector <string> possibleWords;
+
 	while (true) {
 		cout << endl << "Position ('LCD' / CTRL-Z = stop / ? = help)? ";
 		cin >> position;
@@ -123,6 +117,11 @@ void Puzzle::puzzleOperations(Board b, Dictionary dic) {
 			cout << "Enter a word to be added to the crossword board (if its not in the dictionary you can try again)" << endl;
 			cout << "Enter '-' to delete the word starting in the chosen position" << endl;
 			cout << "Word? ";
+			pseudoWord = b.getWildcardWord(position);
+			possibleWords = dic.wildcard(pseudoWord); // Vector containing all the possible words
+			for (int i = 0; i < possibleWords.size(); i++) {
+				cout << possibleWords[i] << ", " << endl;
+			}
 			cin >> word;
 		}
 		if (word == "-") // Remove word input
