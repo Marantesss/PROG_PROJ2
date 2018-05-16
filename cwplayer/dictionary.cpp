@@ -1,5 +1,7 @@
 #include "dictionary.h"
 #include <algorithm> // Transform
+#include <time.h>
+#include <stdlib.h>
 
 Dictionary::Dictionary(string fileName) {
 	string s; // String onde vai ser guardado uma linha do ficheiro de sinonimos
@@ -109,3 +111,27 @@ bool Dictionary::wildcardMatch(const char *str, const char *strWild) { // Funcao
 	return !*str && !*strWild;
 }
 
+void Dictionary::getHints(string word, int numHints, vector<string> hints) {  // Vector as parameter so it can add hints to a non-empty vector
+	map<string, vector<string>>::const_iterator index = synonymes.find(word);
+	srand(time(NULL));
+
+	for (int i = 1; i <= numHints; i++) { // Loop for the number of hints
+		bool isInHints;
+		do {
+			int randPos = rand() % index->second.size() - 1; // Random number
+			isInHints = false;
+
+			if (hints.size() == 0)
+				hints.push_back(index->second.at(randPos)); // If the vector of hints is empty then adds a random synonym
+
+			else { // If the vector is NOT empty checks if the synonym is already in the hints vector
+				for (int j = 0; j < hints.size(); j++)
+					if (index->second.at(randPos) == hints.at(j))
+						isInHints = true;
+				if (!isInHints) // If not adds the synonym to the vector
+					hints.push_back(index->second.at(randPos));
+
+			}
+		} while (isInHints);
+	}
+}

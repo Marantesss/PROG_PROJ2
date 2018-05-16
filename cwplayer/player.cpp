@@ -37,13 +37,12 @@ Player::Player()
 
 	b.loadBoard(crosswordsFile_name);
 	bplayer.loadBoard(crosswordsFile_name);
-	bplayer.emptyGrid(); 
+	bplayer.emptyGrid();
 	bplayer.showBoard();
-
+	makeHints(bplayer, dic);
+	showHints();
 
 	playerOperations(bplayer, dic);
-
-
 }
 
 void Player::playerOperations(Board b, Dictionary dic)
@@ -96,28 +95,47 @@ void Player::playerOperations(Board b, Dictionary dic)
 		cout << endl;
 	}
 }
-/*
+
 void Player::showHints() {
-	for (auto p : horizontalHints)
-		cout << p.first;
+	cout << "HORIZONTAL" << endl;
+	for (auto p : horizontalHints) {
+		cout << p.first << "- ";
+		for (int i = 0; i < p.second.size(); i++) {
+			if (i == p.second.size() - 1)
+				cout << p.second.at(i) << ";";
+			else cout << p.second.at(i) << ", ";
+		}
+	}
+
+	cout << "VERTICAL" << endl;
+	for (auto p : verticalHints) {
+		cout << p.first << "- ";
+		for (int i = 0; i < p.second.size(); i++) {
+			if (i == p.second.size() - 1)
+				cout << p.second.at(i) << ";" << endl;
+			else cout << p.second.at(i) << ", ";
+		}
+	}
 }
 
-void Player::makeHints(Board b, Dictionary dic) { 
+void Player::makeHints(Board b, Dictionary dic) {
 	
 	for (int i = 0; i < b.getBoardWords().size(); i++)
 	{
 		string word = b.getBoardWords().at(i).second;
 		string position = b.getBoardWords().at(i).first;
+		vector<string> hints;
 
 		if (position[2] == 'H') {
 			position = position.substr(0, 2);
-			horizontalHints.insert(pair<string,vector<string>> (position, ));
+			dic.getHints(word, 2, hints);
+			horizontalHints.insert(pair<string,vector<string>> (position, hints));
 		}
 		if (position[2] == 'V') {
 			position = position.substr(0, 2);
-			verticalHints.insert(pair<string, vector<string>>(position, ));
+			dic.getHints(word, 2, hints);
+			verticalHints.insert(pair<string, vector<string>>(position, hints));
 		}
 
 	}
 }
-*/
