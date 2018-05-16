@@ -198,7 +198,7 @@ void Board::removeWord(string position)
 
 	if (orientation == 'V') // VERTICAL words
 	{
-		if (line != 0) // If the word stars in the middle of the line changes the '#' to a '.'
+		if (line != 0) // If the word starts in the middle of the line changes the '#' to a '.'
 			board.at(line - 1).at(column) = '.';
 		
 		while (board.at(line).at(column) != '#' && line < getLines()) 
@@ -206,6 +206,8 @@ void Board::removeWord(string position)
 			if (!isInNonRemovable(line, column)) // If the letter is NOT a crossover letter changes the letter to a '.'
 				board.at(line).at(column) = '.';
 			line++;
+			if (line == getLines()) // Stop the loop condition of trying to access beyond the length of the vector(error) 
+				break;
 		}
 		if (line < getLines()) // If the word ends in the middle of the line changes the '#' to a '.'
 			board.at(line).at(column) = '.';
@@ -213,7 +215,7 @@ void Board::removeWord(string position)
 
 	if (orientation == 'H') // HORIZONTAL words
 	{
-		if (column != 0) // If the word stars in the middle of the column changes the '#' to a '.'
+		if (column != 0) // If the word starts in the middle of the column changes the '#' to a '.'
 			board.at(line).at(column-1) = '.';
 
 		while (board.at(line).at(column) != '#' && column < getColumns())
@@ -221,8 +223,10 @@ void Board::removeWord(string position)
 			if (!isInNonRemovable(line, column)) // If the letter is NOT a crossover letter changes the letter to a '.'
 				board.at(line).at(column) = '.';
 			column++;
+			if (column == getColumns()) // Stop the loop condition of trying to access beyond the length of the vector(error)
+				break;
 		}
-		if (column < getColumns()) // If the word stars in the middle of the column changes the '#' to a '.'
+		if (column < getColumns()) // If the word ends in the middle of the column changes the '#' to a '.'
 			board.at(line).at(column) = '.';
 	}
 	for (int i = 0; i < position_words.size(); i++) // Removes the position and the word from the vector 

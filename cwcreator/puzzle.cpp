@@ -54,7 +54,7 @@ int Puzzle::createPuzzle() {
 		cout << "Dictionary file name ? ";
 		cin >> dictionaryFile_name;
 
-		dictionaryFileName = dictionaryFile_name; // VER SE E NECESSARIO
+		dictionaryFileName = dictionaryFile_name; // Needed to save the board
 
 		dicFile.open(dictionaryFile_name); // Abre ficheiro de input
 
