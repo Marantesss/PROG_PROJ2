@@ -120,8 +120,10 @@ void Puzzle::puzzleOperations(Board b, Dictionary dic) {
 		}
 		if (word == "-") // Remove word input
 			b.removeWord(position);
-		if (dic.isValid(word)) // Does the word belong in the dictionary?
+		if (dic.isValid(word) && !b.wordRepeated(word)) // Does the word belong in the dictionary?
 			b.insertWord(position, word); // Insert word input
+		else if (b.wordRepeated(word))
+			cout << "Word was already inserted in the board" << endl;
 		else if (word != "?" && word != "-") // Only shows error when word is different from 'help' and 'delete'
 			cout << "Invalid word" << endl;
 		b.showBoard();

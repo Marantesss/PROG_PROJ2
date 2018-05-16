@@ -20,6 +20,7 @@ public:
 	void saveBoard(string dictionaryFileName);
 	void saveFinalBoard(string dictionaryFileName);
 	void loadBoard(string fileName);
+	bool wordRepeated(string word); // Checks if an inserted word was already inserted before
 private:
 	int numColumns; // Numero de colunas
 	int numLines; // Numero de linhas
