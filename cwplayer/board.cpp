@@ -71,6 +71,9 @@ void Board::insertWord(string position, string word)
 	transform(word.begin(), word.end(), word.begin(), ::toupper); // Changes the word to uppercase
 
 	if (wordFitsSpace(line, column, orientation, word)) {
+		if (!(wordMatchesSpace(line, column, orientation, word)))
+			cerr << "The word does not match the space" << endl; // displays error message if the word does not match the space
+
 		if (orientation == 'V' && wordMatchesSpace(line, column, orientation, word)) { // insert VERTICAL words, if the word matches the space
 			if (line != 0)
 				board.at(line - 1).at(column) = '#'; // If the word is not being inserted in the beginning of a column places a '#' in the position before
@@ -80,6 +83,7 @@ void Board::insertWord(string position, string word)
 			};
 			if (line < getLines()) 
 				board.at(line).at(column) = '#'; // If the word does not end in the last position of a column places a '#' in the next position
+			position_wordsPLAYER.push_back(make_pair(position, word)); // Adds a pair of (position - word) to a vector
 		}
 
 		if (orientation == 'H' && wordMatchesSpace(line, column, orientation, word)) { // insert HORIZONTAL words, if the word matches the space
@@ -91,15 +95,13 @@ void Board::insertWord(string position, string word)
 			};
 			if (column < getColumns())
 				board.at(line).at(column) = '#'; // If the word does not end in the last position of a line places a '#' in the next position
+			position_wordsPLAYER.push_back(make_pair(position, word)); // Adds a pair of (position - word) to a vector
 		}
-		if (!(wordMatchesSpace(line, column, orientation, word))) 
-			cerr << "The word does not match the space" << endl; // displays error message if the word does not match the space
-
 	}
 	else
 		cerr << "The word does not fit the space" << endl; // displays error message if the word does not fit the space
 
-	position_wordsPLAYER.push_back(make_pair(position, word)); // Adds a pair of (position - word) to a vector
+	
 }
 
 int Board::getIndex(char letter) // Gets the index of a given letter of line or column 
@@ -190,36 +192,40 @@ void Board::removeWord(string position)
 
 	if (orientation == 'V') // VERTICAL words
 	{
-		if (line != 0) // If the word stars in the middle of the line changes the '#' to a '.'
-			board.at(line - 1).at(column) = '.';
+		//if (line != 0) // If the word stars in the middle of the line changes the '#' to a '.'
+		//	board.at(line - 1).at(column) = '.';
 		
 		while (board.at(line).at(column) != '#' && line < getLines()) 
 		{
 			if (!isInNonRemovable(line, column)) // If the letter is NOT a crossover letter changes the letter to a '.'
 				board.at(line).at(column) = '.';
 			line++;
+			if (line == getLines()) // Stop the loop condition of trying to access beyond the length of the vector(error) 
+				break;
 		}
-		if (line < getLines()) // If the word ends in the middle of the line changes the '#' to a '.'
-			board.at(line).at(column) = '.';
+		//if (line < getLines()) // If the word ends in the middle of the line changes the '#' to a '.'
+		//	board.at(line).at(column) = '.';
 	}
 
 	if (orientation == 'H') // HORIZONTAL words
 	{
-		if (column != 0) // If the word stars in the middle of the column changes the '#' to a '.'
-			board.at(line).at(column-1) = '.';
+		//if (column != 0) // If the word stars in the middle of the column changes the '#' to a '.'
+		//	board.at(line).at(column-1) = '.';
 
 		while (board.at(line).at(column) != '#' && column < getColumns())
 		{
 			if (!isInNonRemovable(line, column)) // If the letter is NOT a crossover letter changes the letter to a '.'
 				board.at(line).at(column) = '.';
 			column++;
+			if (column == getColumns()) // Stop the loop condition of trying to access beyond the length of the vector(error) 
+				break;
 		}
-		if (column < getColumns()) // If the word stars in the middle of the column changes the '#' to a '.'
-			board.at(line).at(column) = '.';
+		//if (column < getColumns()) // If the word stars in the middle of the column changes the '#' to a '.'
+		//	board.at(line).at(column) = '.';
 	}
 	for (int i = 0; i < position_wordsPLAYER.size(); i++) // Removes the position and the word from the vector 
 		if (position_wordsPLAYER.at(i).first == position)
-			position_wordsPLAYER.erase(position_words.begin() + i);
+			position_wordsPLAYER.erase(position_wordsPLAYER.begin() + i);
 }
 
 bool Board::isInNonRemovable(int line, int column)

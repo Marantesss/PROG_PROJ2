@@ -82,6 +82,7 @@ void Board::insertWord(string position, string word)
 			};
 			if (line < getLines()) 
 				board.at(line).at(column) = '#'; // If the word does not end in the last position of a column places a '#' in the next position
+			position_words.push_back(make_pair(position, word)); // Adds a pair of (position - word) to a vector
 		}
 
 		if (orientation == 'H' && wordMatchesSpace(line, column, orientation, word)) { // insert HORIZONTAL words, if the word matches the space
@@ -93,8 +94,8 @@ void Board::insertWord(string position, string word)
 			};
 			if (column < getColumns())
 				board.at(line).at(column) = '#'; // If the word does not end in the last position of a line places a '#' in the next position
+			position_words.push_back(make_pair(position, word)); // Adds a pair of (position - word) to a vector
 		}
-		position_words.push_back(make_pair(position, word)); // Adds a pair of (position - word) to a vector
 	}
 	else
 		cerr << "The word does not fit the space" << endl; // displays error message if the word does not fit the space

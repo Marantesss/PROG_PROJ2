@@ -9,7 +9,7 @@ using namespace std;
 
 Player::Player()
 {
-	string dictionaryFile_name= "synonyms.txt", crosswordsFile_name="b001.txt";
+	string dictionaryFile_name= "synonyms.txt", crosswordsFile_name="tryout.txt";
 	ifstream dicFile, crossFile;
 
 	cout << "---------------------------------------" << endl << "CROSSWORDS PLAYER" << endl << "---------------------------------------" << endl;
@@ -62,11 +62,10 @@ void Player::playerOperations(Board b, Dictionary dic)
 		if (cin.fail()) // Ends if entered CTRL+Z
 			if (cin.eof()) {
 				cin.clear();
-				cin.ignore(1000, '\n');
 				break;
 			}
 
-		while (!isValidPosition(b, position)) { 
+		while (!isValidPosition(b, position)) {
 			cout << "Invalid position" << endl;
 			cout << endl << "Position ('LCD' / CTRL-Z = stop / ? = help)? ";
 			cin >> position;
@@ -87,11 +86,12 @@ void Player::playerOperations(Board b, Dictionary dic)
 		}
 		if (word == "-") // Remove word input
 			b.removeWord(position);
-		if (/*dic.isValid(word)*/ true) // Does the word belong in the dictionary?
+		else if (/*dic.isValid(word)*/true) // Does the word belong in the dictionary?
 			b.insertWord(position, word); // Insert word input
 		else if (word != "?" && word != "-") // Only shows error when word is different from 'help' and 'delete'
 			cout << "Invalid word" << endl;
 		b.showBoard();
+		showHints();
 		cout << endl;
 	}
 }
@@ -125,6 +125,7 @@ void Player::makeHints(Board b, Dictionary dic) {
 		string word = b.getBoardWords().at(i).second;
 		string position = b.getBoardWords().at(i).first;
 		vector<string> hints;
+		hints.clear();
 
 		if (position[2] == 'H') {
 			position = position.substr(0, 2);
@@ -137,5 +138,31 @@ void Player::makeHints(Board b, Dictionary dic) {
 			verticalHints.insert(pair<string, vector<string>>(position, hints));
 		}
 
+	}
+}
+
+void Player::addHint(Board b, Dictionary dic, string position) { // Adds 1 hint to a specified position
+	string word;
+	map<string, vector<string>>::const_iterator index; 
+	for (int i = 0; i < b.getBoardWords().size(); i++) { // Gets the word(answer) to find another synonym
+		if (position == b.getBoardWords().at(i).first)
+			word = b.getBoardWords().at(i).second;
+	}
+	vector<string> hints;
+	if (position[2] == 'H') {
+		position = position.substr(0, 2);
+		index = horizontalHints.find(position);// Gets to the synonyms position
+		for (int i = 0; i < index->second.size(); i++)
+			hints.push_back(index->second.at(i));
+		string hint = dic.getHints(word, 1, hints); // Adds a hint to the vector in the map
+		index->second.push_back(hint); 
+	}
+	if (position[2] == 'V') {
+		position = position.substr(0, 2);
+		index = verticalHints.find(position);// Gets to the synonyms position
+		for (int i = 0; i < index->second.size(); i++)
+			hints.push_back(index->second.at(i));
+		string hint = dic.getHints(word, 1, hints); // Adds a hint to the vector in the map
+		index->second.push_back(hint);
 	}
 }

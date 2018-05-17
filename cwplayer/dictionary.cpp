@@ -111,8 +111,9 @@ bool Dictionary::wildcardMatch(const char *str, const char *strWild) { // Funcao
 	return !*str && !*strWild;
 }
 
-void Dictionary::getHints(string word, int numHints, vector<string> hints) {  // Vector as parameter so it can add hints to a non-empty vector
+string Dictionary::getHints(string word, int numHints, vector<string> &hints) {  // Vector as parameter so it can add hints to a non-empty vector
 	map<string, vector<string>>::const_iterator index = synonymes.find(word);
+	string lastHint;
 	srand(time(NULL));
 
 	for (int i = 1; i <= numHints; i++) { // Loop for the number of hints
@@ -130,8 +131,10 @@ void Dictionary::getHints(string word, int numHints, vector<string> hints) {  //
 						isInHints = true;
 				if (!isInHints) // If not adds the synonym to the vector
 					hints.push_back(index->second.at(randPos));
-
 			}
+			if (index->second.size() == hints.size())
+				break;
 		} while (isInHints);
 	}
+	return lastHint;
 }

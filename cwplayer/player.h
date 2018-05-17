@@ -12,11 +12,13 @@ public:
 	void playerOperations(Board b, Dictionary dic);
 	void showHints();
 	void makeHints(Board b, Dictionary dic);
+	void addHint(Board b, Dictionary dic, string position);
 private:
 	string nameOfPlayer;
 	int time;
 	map<string, vector<string>> horizontalHints;
 	map<string, vector<string>> verticalHints;
+
 };
 
 #endif
