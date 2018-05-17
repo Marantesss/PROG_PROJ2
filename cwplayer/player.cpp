@@ -154,15 +154,17 @@ void Player::addHint(Board b, Dictionary dic, string position) { // Adds 1 hint 
 		index = horizontalHints.find(position);// Gets to the synonyms position
 		for (int i = 0; i < index->second.size(); i++)
 			hints.push_back(index->second.at(i));
-		string hint = dic.getHints(word, 1, hints); // Adds a hint to the vector in the map
-		index->second.push_back(hint); 
+		dic.getHints(word, 1, hints); // Adds a hint to the vector in the hints
+		horizontalHints.erase(index);
+		horizontalHints.insert(pair<string, vector<string>>(position, hints)); // Updates the map replacing the element
 	}
 	if (position[2] == 'V') {
 		position = position.substr(0, 2);
 		index = verticalHints.find(position);// Gets to the synonyms position
 		for (int i = 0; i < index->second.size(); i++)
 			hints.push_back(index->second.at(i));
-		string hint = dic.getHints(word, 1, hints); // Adds a hint to the vector in the map
-		index->second.push_back(hint);
+		dic.getHints(word, 1, hints); // Adds a hint to the vector hints
+		verticalHints.erase(index);
+		verticalHints.insert(pair<string, vector<string>>(position, hints)); // Updates the map replacing the element
 	}
 }
