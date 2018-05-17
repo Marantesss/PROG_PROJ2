@@ -1,6 +1,7 @@
 #include "player.h"
 #include "dictionary.h"
 #include "board.h"
+#include "colors.h"
 #include <string>
 #include <iostream>
 #include <fstream> 
@@ -43,6 +44,8 @@ Player::Player()
 	showHints();
 
 	playerOperations(bplayer, dic);
+
+
 }
 
 void Player::playerOperations(Board b, Dictionary dic)
@@ -78,21 +81,37 @@ void Player::playerOperations(Board b, Dictionary dic)
 		cin.ignore(1000, '\n');
 		
 		if (word == "?") {  // Help input
-			cout << "=== HELP ===" << endl;
+			cout << "Hint will be added" << endl;
+			addHint(b, dic, position);
+			/*cout << "=== HELP ===" << endl;
 			cout << "Enter a word to be added to the crossword board (if its not in the dictionary you can try again)" << endl;
 			cout << "Enter '-' to delete the word starting in the chosen position" << endl;
 			cout << "Word? ";
-			cin >> word;
+			cin >> word;*/
 		}
 		if (word == "-") // Remove word input
 			b.removeWord(position);
-		else if (/*dic.isValid(word)*/true) // Does the word belong in the dictionary?
+		else if (dic.isValid(word)) // Does the word belong in the dictionary?
 			b.insertWord(position, word); // Insert word input
 		else if (word != "?" && word != "-") // Only shows error when word is different from 'help' and 'delete'
 			cout << "Invalid word" << endl;
 		b.showBoard();
 		showHints();
 		cout << endl;
+
+		if (b.isBoardFull()) {
+			char answer;
+			cout << "The board is full, do you want to finish (Y/N)? ";
+			cin >> answer;
+			answer = toupper(answer);
+
+			while (cin.fail() || (answer!='Y' && answer!='N')) { cin.clear(); cin.ignore(1000, '\n'); cout << "Invalid entry \n"; 
+			cout << "The board is full, do you want to finish (Y/N)? ";
+			cin >> answer;
+			}
+			if (answer == 'Y')
+				break;
+		}
 	}
 }
 
@@ -120,7 +139,7 @@ void Player::showHints() {
 
 void Player::makeHints(Board b, Dictionary dic) {
 	
-	for (int i = 0; i < b.getBoardWords().size(); i++)
+	for (int i = 0; i < b.getBoardWords().size(); i++) 
 	{
 		string word = b.getBoardWords().at(i).second;
 		string position = b.getBoardWords().at(i).first;

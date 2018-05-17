@@ -19,6 +19,7 @@ public:
 	void removeWord(string position);
 	void loadBoard(string fileName);
 	void emptyGrid();
+	bool isBoardFull();
 	vector<pair<string, string>> getBoardWords();
 private:
 	int numColumns; // Numero de colunas

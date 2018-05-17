@@ -1,4 +1,6 @@
 #include "dictionary.h"
+#include "colors.h"
+#include <iostream>
 #include <algorithm> // Transform
 #include <time.h>
 #include <stdlib.h>
@@ -113,13 +115,12 @@ bool Dictionary::wildcardMatch(const char *str, const char *strWild) { // Funcao
 
 void Dictionary::getHints(string word, int numHints, vector<string> &hints) {  // Vector as parameter so it can add hints to a non-empty vector
 	map<string, vector<string>>::const_iterator index = synonymes.find(word);
-	string lastHint;
 	srand(time(NULL));
 
 	for (int i = 1; i <= numHints; i++) { // Loop for the number of hints
 		bool isInHints;
 		do {
-			int randPos = rand() % index->second.size() - 1; // Random number
+			int randPos = rand() % (index->second.size()); // Random number [0, (number of synonyms -1)]
 			isInHints = false;
 
 			if (hints.size() == 0)
@@ -132,8 +133,12 @@ void Dictionary::getHints(string word, int numHints, vector<string> &hints) {  /
 				if (!isInHints) // If not adds the synonym to the vector
 					hints.push_back(index->second.at(randPos));
 			}
-			if (index->second.size() == hints.size())
+			if (index->second.size() == hints.size()) {
+				setcolor(14);
+				std::cout << "No more hints available!" << endl;
+				setcolor(7, 0);
 				break;
+			}
 		} while (isInHints);
 	}
 }

@@ -75,26 +75,26 @@ void Board::insertWord(string position, string word)
 			cerr << "The word does not match the space" << endl; // displays error message if the word does not match the space
 
 		if (orientation == 'V' && wordMatchesSpace(line, column, orientation, word)) { // insert VERTICAL words, if the word matches the space
-			if (line != 0)
-				board.at(line - 1).at(column) = '#'; // If the word is not being inserted in the beginning of a column places a '#' in the position before
+			//if (line != 0)
+				//board.at(line - 1).at(column) = '#'; // If the word is not being inserted in the beginning of a column places a '#' in the position before
 			for (int i = 0; i < word.length(); i++) {
 				board.at(line).at(column) = word[i]; // inserts the word by changing the vector board
 				line++;
 			};
-			if (line < getLines()) 
-				board.at(line).at(column) = '#'; // If the word does not end in the last position of a column places a '#' in the next position
+			//if (line < getLines()) 
+				//board.at(line).at(column) = '#'; // If the word does not end in the last position of a column places a '#' in the next position
 			position_wordsPLAYER.push_back(make_pair(position, word)); // Adds a pair of (position - word) to a vector
 		}
 
 		if (orientation == 'H' && wordMatchesSpace(line, column, orientation, word)) { // insert HORIZONTAL words, if the word matches the space
-			if (column != 0)
-				board.at(line).at(column - 1) = '#'; // If the word is not being inserted in the beginning of a  places a '#' in the position before
+			//if (column != 0)
+				//board.at(line).at(column - 1) = '#'; // If the word is not being inserted in the beginning of a  places a '#' in the position before
 			for (int i = 0; i < word.length(); i++) {
 				board.at(line).at(column) = word[i]; // inserts the word by changing the vector board
 				column++;
 			};
-			if (column < getColumns())
-				board.at(line).at(column) = '#'; // If the word does not end in the last position of a line places a '#' in the next position
+			//if (column < getColumns())
+				//board.at(line).at(column) = '#'; // If the word does not end in the last position of a line places a '#' in the next position
 			position_wordsPLAYER.push_back(make_pair(position, word)); // Adds a pair of (position - word) to a vector
 		}
 	}
@@ -310,4 +310,12 @@ bool isValidPosition(Board b, string position)
 			return true;
 	}
 	return false;
+}
+
+bool Board::isBoardFull() {
+	for (int i = 0; i < numLines; i++)
+		for (int j = 0; j < numColumns; j++)
+			if (board.at(i).at(j) == '.')
+				return false;
+	return true;
 }
