@@ -8,6 +8,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <ctype.h> // isalpha()
 
 Board::Board(int lines, int columns)
 {
@@ -108,6 +109,45 @@ bool Board::wordRepeated(string word) // Checks if an inserted word was already 
 		if (position_words.at(i).second == word)
 			return true;
 	return false;
+}
+
+string Board::getWildcardWord(string position) // Returns a pseudoword(with '?' and '*')
+{
+	string pseudoWord;
+	int line, column;
+	line = getIndex(toupper(position[0]));
+	column = getIndex(toupper(position[1]));
+	char orientation = toupper(position[2]);
+	if (orientation == 'H') {
+		for (int i = 0; i < board.size() - line; i++) { // Goes over all the elements in the line
+			if (board.at(line).at(i) == '.')
+				pseudoWord += "?";
+			else
+				pseudoWord += board.at(line).at(i);
+		}
+	}
+	if (orientation == 'V') {
+		for (int i = 0; i < board.at(line).size() - column; i++) { // Goes over all the elements in the column
+			if (board.at(i).at(column) == '.')
+				pseudoWord += "?";
+			else
+				pseudoWord += board.at(i).at(column);
+		}
+	}
+
+	// It is necessary to change the last '?'s after the final char to a '*'
+	int index = 0; // Index of the last letter
+	for (int i = 0; i < pseudoWord.length(); i++) {
+		if (pseudoWord[pseudoWord.length() - (1 + i)] == '?') // Goes over the chars of pseudoWord starting from the end
+			index++;
+		else if (isalpha((int)pseudoWord[pseudoWord.length() - (1 + i)])) // Checks if a char is in the A-Z range
+			break;
+	}
+	if (index != 0) {
+		pseudoWord = pseudoWord.substr(0, pseudoWord.length() - index); // All the last '?'s are to be replaced by a single '*'
+		pseudoWord += "*";
+	}
+	return pseudoWord;
 }
 
 int Board::getIndex(char letter) // Gets the index of a given letter of line or column 
