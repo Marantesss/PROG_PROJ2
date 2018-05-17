@@ -20,13 +20,14 @@ public:
 	void loadBoard(string fileName);
 	void emptyGrid();
 	bool isBoardFull();
-	vector<pair<string, string>> getBoardWords();
+	map<string, string> getBoardWords();
+	bool checkSolution();
 private:
 	int numColumns; // Numero de colunas
 	int numLines; // Numero de linhas
 	vector<vector<char>> board;
-	vector<pair<string, string>> position_words;
-	vector<pair<string, string>> position_wordsPLAYER;
+	map<string, string> position_words;
+	map<string, string> position_wordsPLAYER;
 	vector<char> upperLetters = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
 	vector<char> lowerLetters = {' ','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 	vector<pair<int, int>> nonRemovableLetters;

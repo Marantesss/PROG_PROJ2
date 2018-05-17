@@ -60,7 +60,7 @@ void Board::showBoard()
 		}
 	}
 	cout << endl;
-	setcolor(7, 0); // Change back to normal (15=LIGHTGRAY letters, 0=BLACK background)
+	setcolor(7, 0); // Change back to normal (7=LIGHTGRAY letters, 0=BLACK background)
 }
 
 void Board::insertWord(string position, string word)

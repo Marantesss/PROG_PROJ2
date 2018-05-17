@@ -83,7 +83,7 @@ void Board::insertWord(string position, string word)
 			};
 			//if (line < getLines()) 
 				//board.at(line).at(column) = '#'; // If the word does not end in the last position of a column places a '#' in the next position
-			position_wordsPLAYER.push_back(make_pair(position, word)); // Adds a pair of (position - word) to a vector
+			position_wordsPLAYER.insert(pair<string, string>(position, word)); // Adds a pair of (position - word) to a vector
 		}
 
 		if (orientation == 'H' && wordMatchesSpace(line, column, orientation, word)) { // insert HORIZONTAL words, if the word matches the space
@@ -95,7 +95,7 @@ void Board::insertWord(string position, string word)
 			};
 			//if (column < getColumns())
 				//board.at(line).at(column) = '#'; // If the word does not end in the last position of a line places a '#' in the next position
-			position_wordsPLAYER.push_back(make_pair(position, word)); // Adds a pair of (position - word) to a vector
+			position_wordsPLAYER.insert(pair<string, string>(position, word)); // Adds a pair of (position - word) to a vector
 		}
 	}
 	else
@@ -223,9 +223,8 @@ void Board::removeWord(string position)
 		//if (column < getColumns()) // If the word stars in the middle of the column changes the '#' to a '.'
 		//	board.at(line).at(column) = '.';
 	}
-	for (int i = 0; i < position_wordsPLAYER.size(); i++) // Removes the position and the word from the vector 
-		if (position_wordsPLAYER.at(i).first == position)
-			position_wordsPLAYER.erase(position_wordsPLAYER.begin() + i);
+	map<string, string>::const_iterator index = position_wordsPLAYER.find(position); 
+	position_wordsPLAYER.erase(index);
 }
 
 bool Board::isInNonRemovable(int line, int column)
@@ -270,7 +269,7 @@ void Board::loadBoard(string fileName)
 		position = line.substr(0, 3); // Position are the first 3 letters
 		word = line.substr(4); // Words are the remaining letters
 
-		position_words.push_back(make_pair(position, word)); // Makes a pair of (position-word)
+		position_words.insert(make_pair(position, word)); // Makes a pair of (position-word)
 	}
 }
 
@@ -297,18 +296,15 @@ void Board::emptyGrid()
 	}
 }
 
-vector<pair<string, string>> Board::getBoardWords() {
+map<string, string> Board::getBoardWords() {
 	return position_words;
 }
 
 bool isValidPosition(Board b, string position)
 {
-	for (int i = 0; i < b.position_words.size(); i++)
-	{
-		string pos = b.position_words.at(i).first;
-		if (position == pos)
+	for (auto p : b.getBoardWords())
+		if (position == p.first)
 			return true;
-	}
 	return false;
 }
 
@@ -318,4 +314,37 @@ bool Board::isBoardFull() {
 			if (board.at(i).at(j) == '.')
 				return false;
 	return true;
+}
+
+bool Board::checkSolution()
+{
+	map<string, string>::const_iterator  vectorPlayer;
+	bool result = true;
+
+	for (auto p : position_words)
+	{
+		vectorPlayer = position_wordsPLAYER.find(p.first);
+		if (vectorPlayer == position_wordsPLAYER.end()) {
+			result = false;
+			setcolor(4);
+			cout << p.first << "  -------";
+			setcolor(2);
+			cout << " (" << p.second << ")" << endl;
+		}
+		else if (p.second == vectorPlayer->second)
+		{
+			setcolor(2);
+			cout << p.first << "  " << vectorPlayer->second << endl;
+		}
+		else
+		{
+			result = false;
+			setcolor(4);
+			cout << p.first << "  " << vectorPlayer->second;
+			setcolor(2);
+			cout << " (" << p.second << ")" << endl;
+		}
+	}
+	setcolor(7, 0);
+	return result;
 }

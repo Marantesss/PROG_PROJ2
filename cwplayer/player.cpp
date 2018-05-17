@@ -2,8 +2,11 @@
 #include "dictionary.h"
 #include "board.h"
 #include "colors.h"
+#include <ctime>
+#include <chrono>
 #include <string>
 #include <iostream>
+#include <sstream>
 #include <fstream> 
 
 using namespace std;
@@ -43,12 +46,28 @@ Player::Player()
 	makeHints(bplayer, dic);
 	showHints();
 
+	chrono::steady_clock::time_point begin = chrono::steady_clock::now();
 	playerOperations(bplayer, dic);
+	
+	chrono::steady_clock::time_point end = chrono::steady_clock::now();
+	timeElapsed = chrono::duration_cast<chrono::seconds>(end - begin).count();
 
+	cout << "Checking solution..." << endl;
 
+	if (bplayer.checkSolution()) 
+	{
+		setcolor(2);
+		cout << "CONGRATS!";
+		setcolor(7, 0);
+		savePlayer(crosswordsFile_name);
+	}
+	else
+	{
+		cout << "Better luck next time...";
+	}
 }
 
-void Player::playerOperations(Board b, Dictionary dic)
+void Player::playerOperations(Board &b, Dictionary dic)
 {
 	string position, word;
 
@@ -81,8 +100,9 @@ void Player::playerOperations(Board b, Dictionary dic)
 		cin.ignore(1000, '\n');
 		
 		if (word == "?") {  // Help input
-			cout << "Hint will be added" << endl;
+			cout << "Hint will be added!" << endl;
 			addHint(b, dic, position);
+			aditionalHints++;
 			/*cout << "=== HELP ===" << endl;
 			cout << "Enter a word to be added to the crossword board (if its not in the dictionary you can try again)" << endl;
 			cout << "Enter '-' to delete the word starting in the chosen position" << endl;
@@ -139,10 +159,10 @@ void Player::showHints() {
 
 void Player::makeHints(Board b, Dictionary dic) {
 	
-	for (int i = 0; i < b.getBoardWords().size(); i++) 
+	for (auto p : b.getBoardWords())//int i = 0; i < b.getBoardWords().size(); i++)
 	{
-		string word = b.getBoardWords().at(i).second;
-		string position = b.getBoardWords().at(i).first;
+		string word = p.second;
+		string position = p.first;
 		vector<string> hints;
 		hints.clear();
 
@@ -163,9 +183,9 @@ void Player::makeHints(Board b, Dictionary dic) {
 void Player::addHint(Board b, Dictionary dic, string position) { // Adds 1 hint to a specified position
 	string word;
 	map<string, vector<string>>::const_iterator index; 
-	for (int i = 0; i < b.getBoardWords().size(); i++) { // Gets the word(answer) to find another synonym
-		if (position == b.getBoardWords().at(i).first)
-			word = b.getBoardWords().at(i).second;
+	for (auto p: b.getBoardWords())/*int i = 0; i < b.getBoardWords().size(); i++)*/ { // Gets the word(answer) to find another synonym
+		if (position == p.first)
+			word = p.second;
 	}
 	vector<string> hints;
 	if (position[2] == 'H') {
@@ -186,4 +206,25 @@ void Player::addHint(Board b, Dictionary dic, string position) { // Adds 1 hint 
 		verticalHints.erase(index);
 		verticalHints.insert(pair<string, vector<string>>(position, hints)); // Updates the map replacing the element
 	}
+}
+
+void Player::savePlayer(string crossFileName)
+{
+	string recordsFileName = crossFileName.substr(0, 4) + "_t.txt";
+	ofstream recordsFile;
+
+	recordsFile.open(recordsFileName);
+
+	recordsFile << "Name of player: " << nameOfPlayer << "   Aditional hints: " << aditionalHints << "   Time elapsed: " << timeElapsed_min(timeElapsed) << endl; 
+}
+
+string Player::timeElapsed_min(int time)
+{
+	int mins, secs;
+	ostringstream timeElapsed_min;
+	mins = time / 60;
+	secs = time % 60;
+
+	timeElapsed_min << mins << " minutes " << secs << " seconds";
+	return timeElapsed_min.str();
 }
