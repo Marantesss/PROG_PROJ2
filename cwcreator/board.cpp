@@ -9,11 +9,13 @@
 #include <sstream>
 #include <algorithm>
 #include <ctype.h> // isalpha()
+#include <iomanip>
 
 Board::Board(int lines, int columns)
 {
 	numColumns = columns;
 	numLines = lines;
+	newBoard = true;
 	
 	board.resize(numLines); // Resizes the vector 'board' to the user-entered number of lines
 	for (int i = 0; i < numLines; i++)
@@ -118,35 +120,23 @@ string Board::getWildcardWord(string position) // Returns a pseudoword(with '?' 
 	line = getIndex(toupper(position[0]));
 	column = getIndex(toupper(position[1]));
 	char orientation = toupper(position[2]);
-	if (orientation == 'H') {
-		for (int i = 0; i < board.size() - line; i++) { // Goes over all the elements in the line
-			if (board.at(line).at(i) == '.')
-				pseudoWord += "?";
-			else
-				pseudoWord += board.at(line).at(i);
-		}
-	}
 	if (orientation == 'V') {
-		for (int i = 0; i < board.at(line).size() - column; i++) { // Goes over all the elements in the column
+		for (int i = line; i < board.size(); i++) { // Goes over all the elements in the line
 			if (board.at(i).at(column) == '.')
 				pseudoWord += "?";
 			else
 				pseudoWord += board.at(i).at(column);
 		}
 	}
+	if (orientation == 'H') {
+		for (int i = column; i < board.at(line).size(); i++) { // Goes over all the elements in the column
+			if (board.at(line).at(i) == '.')
+				pseudoWord += "?";
+			else
+				pseudoWord += board.at(line).at(i);
+		}
+	}
 
-	// It is necessary to change the last '?'s after the final char to a '*'
-	int index = 0; // Index of the last letter
-	for (int i = 0; i < pseudoWord.length(); i++) {
-		if (pseudoWord[pseudoWord.length() - (1 + i)] == '?') // Goes over the chars of pseudoWord starting from the end
-			index++;
-		else if (isalpha((int)pseudoWord[pseudoWord.length() - (1 + i)])) // Checks if a char is in the A-Z range
-			break;
-	}
-	if (index != 0) {
-		pseudoWord = pseudoWord.substr(0, pseudoWord.length() - index); // All the last '?'s are to be replaced by a single '*'
-		pseudoWord += "*";
-	}
 	return pseudoWord;
 }
 
@@ -296,13 +286,23 @@ void Board::finalizeBoard()
 void Board::saveBoard(string dictionaryFileName)
 {
 	ofstream boardFile;
-	//if (crossFile.is_open()) { // Checks if the ifstream file is opened, if it is, then the board was resumed and will be saved with the same name
-	//}
-	cout << "File will be saved into a text file...";
-	string fileName;
+	ostringstream oss; // oss is later converted to string
 
-	fileName += ".txt"; 
-	boardFile.open(fileName); // Opens the file 
+	if (newBoard) { // New board gets a new name
+		oss << "b" << setfill('0') << setw(3) << boardNameCounter;
+		oss << ".txt"; // oss = bxxx.txt
+		ofstream boardFile(oss.str());
+	}
+	/*
+	else { // Resumed Board stays with the same name
+		oss << 
+		ofstream boardFile(oss.str());
+	}
+	*/
+	
+	cout << "File will be saved into a text file..." << endl << endl;
+
+	boardFile.open(oss.str()); // Opens the file 
 
 	
 	boardFile << dictionaryFileName << endl;  // 1st line contains the name of the dictionary file
@@ -324,8 +324,7 @@ void Board::saveBoard(string dictionaryFileName)
 }
 void Board::saveFinalBoard(string dictionaryFileName) // Igual a save board mas o nome vai ser criado sozinho 
 {
-	ofstream boardFile; 
-
+	ofstream boardFile;
 	cout << "File will be saved into a text file (enter only the name of the file): ";
 
 	string fileName;
@@ -356,6 +355,7 @@ void Board::loadBoard(string fileName)
 {
 	ifstream boardFile;
 	string line;
+	newBoard = false;
 
 	boardFile.open(fileName);  // File to load 
 	if (!boardFile.is_open())
