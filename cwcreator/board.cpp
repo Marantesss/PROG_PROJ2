@@ -283,13 +283,37 @@ void Board::finalizeBoard()
 
 }
 
+int Board::boardNameCounter() // Returns the number of the board that has not yet been created
+{
+	int i = 0;
+	ostringstream oss;
+
+	while (true) {
+		i++;
+		oss << "b" << setfill('0') << setw(3) << i;
+		oss << ".txt"; // oss = bxxx.txt
+
+		ifstream boardFile(oss.str());
+		boardFile.open(oss.str()); // Opens the file 
+
+		if (!boardFile.is_open())
+		{
+			return i;
+		}
+
+		boardFile.close();
+		oss.str(string()); // clears oss
+	}
+}
+
 void Board::saveBoard(string dictionaryFileName)
 {
 	ofstream boardFile;
 	ostringstream oss; // oss is later converted to string
+	int boardName = boardNameCounter();
 
 	if (newBoard) { // New board gets a new name
-		oss << "b" << setfill('0') << setw(3) << boardNameCounter;
+		oss << "b" << setfill('0') << setw(3) << boardName;
 		oss << ".txt"; // oss = bxxx.txt
 		ofstream boardFile(oss.str());
 	}

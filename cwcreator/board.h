@@ -35,7 +35,7 @@ private:
 	int getIndex(char letter);
 	bool isInNonRemovable(int line, int colunms);
 	vector<char> loadBoardLine(string &line);
-	int boardNameCounter = 1; // board counter of the number of board created in one run
+	int boardNameCounter (); // board counter of the number of boards created
 	bool newBoard; // true if new board, false if resumed board
 };
 
