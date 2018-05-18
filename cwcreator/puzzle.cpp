@@ -116,12 +116,14 @@ void Puzzle::puzzleOperations(Board b, Dictionary dic) {
 			cout << "=== HELP ===" << endl;
 			cout << "Enter a word to be added to the crossword board (if its not in the dictionary you can try again)" << endl;
 			cout << "Enter '-' to delete the word starting in the chosen position" << endl;
-			cout << "Word? ";
+			cout << "Possible words are..." << endl;
 			pseudoWord = b.getWildcardWord(position);
 			possibleWords = dic.wildcard(pseudoWord); // Vector containing all the possible words
 			for (int i = 0; i < possibleWords.size(); i++) {
-				cout << possibleWords[i] << ", " << endl;
+				if (!b.wordRepeated(possibleWords[i]))
+					cout << possibleWords[i] << ", ";
 			}
+			cout << endl << "Word? ";
 			cin >> word;
 		}
 		if (word == "-") // Remove word input

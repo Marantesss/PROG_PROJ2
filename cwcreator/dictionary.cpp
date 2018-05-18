@@ -68,12 +68,20 @@ bool Dictionary::isValid(string word) { // Verifica se uma palavra pertence ao d
 
 vector<string> Dictionary::wildcard(string pseudoWord) { // Recebe parte de uma palavra e devolve um vetor com todas as palavras que podem ser escritas
 	vector<string> matchingWords;
-
-	for (auto p : synonymes) { // p.first = KEY e p.second = VALUE
-		if (wildcardMatch(p.first.c_str(), pseudoWord.c_str()))
-			matchingWords.push_back(p.first);
+	if (!isalpha(pseudoWord[pseudoWord.length() - 1])) { // Cheks if the last character in the string is a letter or '?'
+		while (!isalpha(pseudoWord[pseudoWord.length() - 1])) { // While the last charater is a '?' keep adding words
+			for (auto p : synonymes) { // p.first = KEY e p.second = VALUE
+				if (wildcardMatch(p.first.c_str(), pseudoWord.c_str()))
+					matchingWords.push_back(p.first);
+			}
+			pseudoWord = pseudoWord.substr(0, pseudoWord.length() - 1); // Remmoves a '?'
+		}
 	}
-
+	else
+		for (auto p : synonymes) { // p.first = KEY e p.second = VALUE
+			if (wildcardMatch(p.first.c_str(), pseudoWord.c_str()))
+				matchingWords.push_back(p.first);
+		}
 	return matchingWords;
 }
 
