@@ -140,9 +140,9 @@ void Puzzle::puzzleOperations(Board b, Dictionary dic) {
 
 	do {
 		cout << endl << "OPTIONS" << endl;
-		cout << "1- Save and resume later" << endl << "2- Finish" << endl;
+		cout << "1- Save and resume later" << endl << "2- Finish" << endl << "0- Discard" << endl;
 		cin >> option;
-		if (option != 1 && option != 2)   // Invalid entries 
+		if (option != 1 && option != 2 && option != 0)   // Invalid entries 
 			cout << "Not a valid option..." << endl << endl;
 
 		if (option == 1) 
@@ -151,7 +151,7 @@ void Puzzle::puzzleOperations(Board b, Dictionary dic) {
 			b.finalizeBoard(); // Fills the elements that are not letters or '#' with '#'
 			b.saveFinalBoard(dictionaryFileName);
 		}
-	} while (option != 1 && option != 2);
+	} while (option != 1 && option != 2 && option != 0); 
 
 }
 

@@ -13,7 +13,7 @@ using namespace std;
 
 Player::Player()
 {
-	string dictionaryFile_name= "synonyms.txt", crosswordsFile_name="tryout.txt";
+	string dictionaryFile_name= "synonyms.txt", crosswordsFile_name="b001.txt";
 	ifstream dicFile, crossFile;
 
 	cout << "---------------------------------------" << endl << "CROSSWORDS PLAYER" << endl << "---------------------------------------" << endl;
@@ -101,7 +101,7 @@ void Player::playerOperations(Board &b, Dictionary dic)
 		
 		if (word == "?") {  // Help input
 			cout << "Hint will be added!" << endl;
-			addHint(b, dic, position);
+			addHint(b, dic, position);                       // ERRO QUANDO NAO TEM MAIS HINTS E addiciona sempre que pede hints
 			aditionalHints++;
 			/*cout << "=== HELP ===" << endl;
 			cout << "Enter a word to be added to the crossword board (if its not in the dictionary you can try again)" << endl;
@@ -207,15 +207,24 @@ void Player::addHint(Board b, Dictionary dic, string position) { // Adds 1 hint 
 		verticalHints.insert(pair<string, vector<string>>(position, hints)); // Updates the map replacing the element
 	}
 }
+bool fileExists(const string fileName);
 
 void Player::savePlayer(string crossFileName)
 {
 	string recordsFileName = crossFileName.substr(0, 4) + "_t.txt";
 	ofstream recordsFile;
 
-	recordsFile.open(recordsFileName);
-
-	recordsFile << "Name of player: " << nameOfPlayer << "   Aditional hints: " << aditionalHints << "   Time elapsed: " << timeElapsed_min(timeElapsed) << endl; 
+	if (fileExists(recordsFileName))
+	{
+		recordsFile.open(recordsFileName, ios::app);
+		recordsFile << endl << "Name of player: " << nameOfPlayer << "   Aditional hints: " << aditionalHints << "   Time elapsed: " << timeElapsed_min(timeElapsed) << endl;
+	}
+	else
+	{
+		recordsFile.open(recordsFileName);
+		recordsFile << "======RECORDS - board " << crossFileName << "======" << endl << endl;
+		recordsFile << "Name of player: " << nameOfPlayer << "   Aditional hints: " << aditionalHints << "   Time elapsed: " << timeElapsed_min(timeElapsed) << endl;
+	}
 }
 
 string Player::timeElapsed_min(int time)
@@ -227,4 +236,10 @@ string Player::timeElapsed_min(int time)
 
 	timeElapsed_min << mins << " minutes " << secs << " seconds";
 	return timeElapsed_min.str();
+}
+
+bool fileExists(const string fileName)
+{
+	std::ifstream infile(fileName);
+	return infile.good();
 }
