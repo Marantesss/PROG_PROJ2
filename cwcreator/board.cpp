@@ -101,6 +101,7 @@ void Board::insertWord(string position, string word)
 	}
 	else
 		cerr << "The word does not fit the space" << endl; // displays error message if the word does not fit the space
+	//resetBoard();
 }
 
 bool Board::wordRepeated(string word) // Checks if an inserted word was already inserted before
@@ -162,7 +163,7 @@ bool Board::wordFitsSpace(int const &line, int const &column, char const &orient
 }
 
 bool Board::wordMatchesSpace(int const &line, int const &column, char const &orientation, string const &word)
-// Cheks if the word matches with the already in-board letters
+// Checks if the word matches with the already in-board letters
 {
 	vector<pair<int, int>> temporaryNonRemovableLetters;
 	int movingBoardVariable;
@@ -182,12 +183,12 @@ bool Board::wordMatchesSpace(int const &line, int const &column, char const &ori
 			{
 				if (board.at(movingBoardVariable).at(column) != toupper(word[i])) // If the word letter is different from the board letter returns false
 					return false;
-				pair<int, int> dontRemove = make_pair(movingBoardVariable, column); // if the Crossover letters match add the coordinate to a vector of pairs
-				temporaryNonRemovableLetters.push_back(dontRemove);
+				//pair<int, int> dontRemove = make_pair(movingBoardVariable, column); // if the Crossover letters match add the coordinate to a vector of pairs
+				//temporaryNonRemovableLetters.push_back(dontRemove);
 			}
 			movingBoardVariable++;
 		}
-		nonRemovableLetters.insert(nonRemovableLetters.end(), temporaryNonRemovableLetters.begin(), temporaryNonRemovableLetters.end()); // If the path leaves the loop FOR adds the (temporary vector of) crossover letters to a vector
+		//nonRemovableLetters.insert(nonRemovableLetters.end(), temporaryNonRemovableLetters.begin(), temporaryNonRemovableLetters.end()); // If the path leaves the loop FOR adds the (temporary vector of) crossover letters to a vector
 		return true;
 	}
 	
@@ -207,12 +208,12 @@ bool Board::wordMatchesSpace(int const &line, int const &column, char const &ori
 			{
 				if (board.at(line).at(movingBoardVariable) != toupper (word[i]))
 					return false;
-				pair<int, int> dontRemove = make_pair(line, movingBoardVariable);
-				temporaryNonRemovableLetters.push_back(dontRemove);
+				//pair<int, int> dontRemove = make_pair(line, movingBoardVariable);
+				//temporaryNonRemovableLetters.push_back(dontRemove);
 			}
 			movingBoardVariable++;
 		}
-		nonRemovableLetters.insert(nonRemovableLetters.end(), temporaryNonRemovableLetters.begin(), temporaryNonRemovableLetters.end());
+		//nonRemovableLetters.insert(nonRemovableLetters.end(), temporaryNonRemovableLetters.begin(), temporaryNonRemovableLetters.end());
 		return true;
 	}
 }
@@ -231,8 +232,7 @@ void Board::removeWord(string position)
 		
 		while (board.at(line).at(column) != '#' && line < getLines()) 
 		{
-			if (!isInNonRemovable(line, column)) // If the letter is NOT a crossover letter changes the letter to a '.'
-				board.at(line).at(column) = '.';
+			board.at(line).at(column) = '.';
 			line++;
 			if (line == getLines()) // Stop the loop condition of trying to access beyond the length of the vector(error) 
 				break;
@@ -248,8 +248,7 @@ void Board::removeWord(string position)
 
 		while (board.at(line).at(column) != '#' && column < getColumns())
 		{
-			if (!isInNonRemovable(line, column)) // If the letter is NOT a crossover letter changes the letter to a '.'
-				board.at(line).at(column) = '.';
+			board.at(line).at(column) = '.';
 			column++;
 			if (column == getColumns()) // Stop the loop condition of trying to access beyond the length of the vector(error)
 				break;
@@ -260,26 +259,8 @@ void Board::removeWord(string position)
 	for (int i = 0; i < position_words.size(); i++) // Removes the position and the word from the vector 
 		if (position_words.at(i).first == position)
 			position_words.erase(position_words.begin() + i);
-}
 
-vector<pair<int, int>> Board::findNonRemovableLetters() // When the board is resumed, the non removable letters are found
-{
-	for (int i = 0; i < numColumns; i++) {
-		for (int j = 0; j < numLines; j++) {
-			if (board.at(i).at(j) )
-		}
-	}
-}
-
-bool Board::isInNonRemovable(int line, int column)
-{
-	for (int i = 0; i < nonRemovableLetters.size(); i++) // Checks if the pair is in the nonRemovableLetters 
-		if (nonRemovableLetters.at(i).first == line && nonRemovableLetters.at(i).second == column)
-		{
-			nonRemovableLetters.erase(nonRemovableLetters.begin() + i); // If so removes that pair because the letter is no longer a crossover letter
-			return true;
-		}
-	return false;
+	resetBoard();
 }
 
 void Board::finalizeBoard()
@@ -344,7 +325,6 @@ void Board::saveBoard(string dictionaryFileName) {
 
 void Board::saveFinalBoard(string dictionaryFileName) // Same as saveBoard but the name is chosen by the user
 {
-	ofstream boardFile;
 	ostringstream oss; // oss is later converted to string
 	int boardName = boardNameCounter();
 
@@ -406,6 +386,57 @@ void Board::loadBoard(string fileName)
 
 		position_words.push_back(make_pair(position, word)); // Makes a pair of (position-word)
 	}
+}
+
+void Board::resetBoard() // Resets the board to empty, and then adds the word in vector position_words
+{
+	for (int i = 0; i < numLines; i++) // Fills the vector board with "."
+		for (int j = 0; j < numColumns; j++)
+			board.at(i).at(j) = '.';
+
+	for (int i = 0; i < position_words.size(); i++) { // Writes the words on vector position_word
+		insertWordBoard(position_words.at(i).first, position_words.at(i).second);
+	}
+	
+}
+
+void Board::insertWordBoard(string position, string word)
+{
+	int line, column;
+	line = getIndex(toupper(position[0]));
+	column = getIndex(toupper(position[1]));
+	char orientation = toupper(position[2]);
+	transform(word.begin(), word.end(), word.begin(), ::toupper); // Changes the word to uppercase
+
+	if (wordFitsSpace(line, column, orientation, word)) {
+		if (!(wordMatchesSpace(line, column, orientation, word)))
+			cerr << "The word does not match the space" << endl; // displays error message if the word does not match the space
+		if (orientation == 'V' && wordMatchesSpace(line, column, orientation, word)) { // insert VERTICAL words, if the word matches the space
+			if (line != 0)
+				board.at(line - 1).at(column) = '#'; // If the word is not being inserted in the beginning of a column places a '#' in the position before
+			for (int i = 0; i < word.length(); i++) {
+				board.at(line).at(column) = word[i]; // inserts the word by changing the vector board
+				line++;
+			};
+			if (line < getLines())
+				board.at(line).at(column) = '#'; // If the word does not end in the last position of a column places a '#' in the next position
+			//position_words.push_back(make_pair(position, word)); // Adds a pair of (position - word) to a vector
+		}
+
+		if (orientation == 'H' && wordMatchesSpace(line, column, orientation, word)) { // insert HORIZONTAL words, if the word matches the space
+			if (column != 0)
+				board.at(line).at(column - 1) = '#'; // If the word is not being inserted in the beginning of a  places a '#' in the position before
+			for (int i = 0; i < word.length(); i++) {
+				board.at(line).at(column) = word[i]; // inserts the word by changing the vector board
+				column++;
+			};
+			if (column < getColumns())
+				board.at(line).at(column) = '#'; // If the word does not end in the last position of a line places a '#' in the next position
+			//position_words.push_back(make_pair(position, word)); // Adds a pair of (position - word) to a vector
+		}
+	}
+	else
+		cerr << "The word does not fit the space" << endl; // displays error message if the word does not fit the space
 }
 
 vector<char> Board::loadBoardLine(string &line)
