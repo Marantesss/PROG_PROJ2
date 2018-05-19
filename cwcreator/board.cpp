@@ -101,7 +101,6 @@ void Board::insertWord(string position, string word)
 	}
 	else
 		cerr << "The word does not fit the space" << endl; // displays error message if the word does not fit the space
-	//resetBoard();
 }
 
 bool Board::wordRepeated(string word) // Checks if an inserted word was already inserted before
@@ -183,12 +182,9 @@ bool Board::wordMatchesSpace(int const &line, int const &column, char const &ori
 			{
 				if (board.at(movingBoardVariable).at(column) != toupper(word[i])) // If the word letter is different from the board letter returns false
 					return false;
-				//pair<int, int> dontRemove = make_pair(movingBoardVariable, column); // if the Crossover letters match add the coordinate to a vector of pairs
-				//temporaryNonRemovableLetters.push_back(dontRemove);
 			}
 			movingBoardVariable++;
 		}
-		//nonRemovableLetters.insert(nonRemovableLetters.end(), temporaryNonRemovableLetters.begin(), temporaryNonRemovableLetters.end()); // If the path leaves the loop FOR adds the (temporary vector of) crossover letters to a vector
 		return true;
 	}
 	
@@ -208,12 +204,9 @@ bool Board::wordMatchesSpace(int const &line, int const &column, char const &ori
 			{
 				if (board.at(line).at(movingBoardVariable) != toupper (word[i]))
 					return false;
-				//pair<int, int> dontRemove = make_pair(line, movingBoardVariable);
-				//temporaryNonRemovableLetters.push_back(dontRemove);
 			}
 			movingBoardVariable++;
 		}
-		//nonRemovableLetters.insert(nonRemovableLetters.end(), temporaryNonRemovableLetters.begin(), temporaryNonRemovableLetters.end());
 		return true;
 	}
 }
@@ -397,7 +390,6 @@ void Board::resetBoard() // Resets the board to empty, and then adds the word in
 	for (int i = 0; i < position_words.size(); i++) { // Writes the words on vector position_word
 		insertWordBoard(position_words.at(i).first, position_words.at(i).second);
 	}
-	
 }
 
 void Board::insertWordBoard(string position, string word)
@@ -420,7 +412,6 @@ void Board::insertWordBoard(string position, string word)
 			};
 			if (line < getLines())
 				board.at(line).at(column) = '#'; // If the word does not end in the last position of a column places a '#' in the next position
-			//position_words.push_back(make_pair(position, word)); // Adds a pair of (position - word) to a vector
 		}
 
 		if (orientation == 'H' && wordMatchesSpace(line, column, orientation, word)) { // insert HORIZONTAL words, if the word matches the space
@@ -432,7 +423,6 @@ void Board::insertWordBoard(string position, string word)
 			};
 			if (column < getColumns())
 				board.at(line).at(column) = '#'; // If the word does not end in the last position of a line places a '#' in the next position
-			//position_words.push_back(make_pair(position, word)); // Adds a pair of (position - word) to a vector
 		}
 	}
 	else
