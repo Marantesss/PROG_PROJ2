@@ -10,10 +10,10 @@ using namespace std;
 
 class Board {
 public:
-	Board(int lines, int columns); // Atualiza o numero de colunas de linhas
-	int getColumns() const; // Devolve o numero de colunas
-	int getLines() const; // Devolve o numero de linhas
-	void showBoard(); // Da print ao tabuleiro
+	Board(int lines, int columns); // Update number of lines and columns
+	int getColumns() const; // Returns the number of columns
+	int getLines() const; // Returns the number of lines
+	void showBoard(); // Prints the board
 	void insertWord(string position, string word);
 	void removeWord(string position);
 	void finalizeBoard();
@@ -23,8 +23,8 @@ public:
 	bool wordRepeated(string word); // Checks if an inserted word was already inserted before
 	string getWildcardWord(string position); // Returns a pseudoword (with '?' and '*')
 private:
-	int numColumns; // Numero de colunas
-	int numLines; // Numero de linhas
+	int numColumns; // Number of columns
+	int numLines; // Number of lines
 	vector<vector<char>> board;
 	vector<pair<string, string>> position_words;
 	vector<char> upperLetters = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
@@ -33,10 +33,10 @@ private:
 	bool wordFitsSpace(int const &line, int const &column, char const &orientation, string const &word);
 	bool wordMatchesSpace(int const &line, int const &column, char const &orientation, string const &word);
 	int getIndex(char letter);
+	vector<pair<int, int>> findNonRemovableLetters(); // When the board is resumed, the non removable letters are found
 	bool isInNonRemovable(int line, int colunms);
 	vector<char> loadBoardLine(string &line);
 	int boardNameCounter (); // board counter of the number of boards created
-	bool newBoard; // true if new board, false if resumed board
 };
 
 #endif

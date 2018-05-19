@@ -15,7 +15,6 @@ Board::Board(int lines, int columns)
 {
 	numColumns = columns;
 	numLines = lines;
-	newBoard = true;
 	
 	board.resize(numLines); // Resizes the vector 'board' to the user-entered number of lines
 	for (int i = 0; i < numLines; i++)
@@ -56,7 +55,7 @@ void Board::showBoard()
 				cout << "  "; // Prints each position of the board stored in board
 			}
 			else {
-				setcolor(0, 12); // Change the color of the letters 4=RED and background 12=LIGTHRED
+				setcolor(0, 12); // Change the color of the letters 0=BLACK and background 12=LIGTHRED
 				cout << board.at(i).at(j) << "  "; // Prints each position of the board stored in board
 			}
 		}
@@ -263,6 +262,15 @@ void Board::removeWord(string position)
 			position_words.erase(position_words.begin() + i);
 }
 
+vector<pair<int, int>> Board::findNonRemovableLetters() // When the board is resumed, the non removable letters are found
+{
+	for (int i = 0; i < numColumns; i++) {
+		for (int j = 0; j < numLines; j++) {
+			if (board.at(i).at(j) )
+		}
+	}
+}
+
 bool Board::isInNonRemovable(int line, int column)
 {
 	for (int i = 0; i < nonRemovableLetters.size(); i++) // Checks if the pair is in the nonRemovableLetters 
@@ -306,30 +314,17 @@ int Board::boardNameCounter() // Returns the number of the board that has not ye
 	}
 }
 
-void Board::saveBoard(string dictionaryFileName)
-{
+void Board::saveBoard(string dictionaryFileName) {
 	ofstream boardFile;
-	ostringstream oss; // oss is later converted to string
-	int boardName = boardNameCounter();
+	cout << "File will be saved into a text file (enter only the name of the file): ";
 
-	if (newBoard) { // New board gets a new name
-		oss << "b" << setfill('0') << setw(3) << boardName;
-		oss << ".txt"; // oss = bxxx.txt
-		ofstream boardFile(oss.str());
-	}
-	/*
-	else { // Resumed Board stays with the same name
-		oss << 
-		ofstream boardFile(oss.str());
-	}
-	*/
-	
-	cout << "File will be saved into a text file..." << endl << endl;
+	string fileName;
+	cin >> fileName;
 
-	boardFile.open(oss.str()); // Opens the file 
+	fileName += ".txt";
+	boardFile.open(fileName);
 
-	
-	boardFile << dictionaryFileName << endl;  // 1st line contains the name of the dictionary file
+	boardFile << dictionaryFileName << endl;
 
 	for (int i = 0; i < numLines; i++) // Saves the (vector) board
 	{
@@ -346,20 +341,24 @@ void Board::saveBoard(string dictionaryFileName)
 		boardFile << position_words.at(i).first << " " << position_words.at(i).second;
 	}
 }
-void Board::saveFinalBoard(string dictionaryFileName) // Igual a save board mas o nome vai ser criado sozinho 
+
+void Board::saveFinalBoard(string dictionaryFileName) // Same as saveBoard but the name is chosen by the user
 {
 	ofstream boardFile;
-	cout << "File will be saved into a text file (enter only the name of the file): ";
+	ostringstream oss; // oss is later converted to string
+	int boardName = boardNameCounter();
 
-	string fileName;
-	cin >> fileName;
+	oss << "b" << setfill('0') << setw(3) << boardName;
+	oss << ".txt"; // oss = bxxx.txt
+	ofstream boardFile(oss.str());
 
-	fileName += ".txt";
-	boardFile.open(fileName);
+	cout << "File will be saved into a text file..." << endl << endl;
+
+	boardFile.open(oss.str()); // Opens the file 
 
 	boardFile << dictionaryFileName << endl;
 
-	for (int i = 0; i < numLines; i++)
+	for (int i = 0; i < numLines; i++) // Saves the (vector) board
 	{
 		boardFile << endl;
 		for (int j = 0; j < numColumns; j++)
@@ -368,7 +367,7 @@ void Board::saveFinalBoard(string dictionaryFileName) // Igual a save board mas 
 
 	boardFile << endl;
 
-	for (int i = 0; i < position_words.size(); i++)
+	for (int i = 0; i < position_words.size(); i++) // Saves the position and the respective words
 	{
 		boardFile << endl;
 		boardFile << position_words.at(i).first << " " << position_words.at(i).second;
@@ -379,7 +378,6 @@ void Board::loadBoard(string fileName)
 {
 	ifstream boardFile;
 	string line;
-	newBoard = false;
 
 	boardFile.open(fileName);  // File to load 
 	if (!boardFile.is_open())
@@ -399,8 +397,7 @@ void Board::loadBoard(string fileName)
 			break;
 	}
 	
-	while (!boardFile.eof()) // Loads the positions and the words to a vector of pairs
-	{
+	while (!boardFile.eof()) { // Loads the positions and the words to a vector of pairs
 		string position, word;
 		getline(boardFile, line);
 		

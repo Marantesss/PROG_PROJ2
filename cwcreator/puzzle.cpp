@@ -56,24 +56,24 @@ int Puzzle::createPuzzle() {
 
 		dictionaryFileName = dictionaryFile_name; // Needed to save the board
 
-		dicFile.open(dictionaryFile_name); // Abre ficheiro de input
+		dicFile.open(dictionaryFile_name); // open input file
 
-		if (!dicFile.is_open()) { // Se o ficheiro de input nao estiver aberto
+		if (!dicFile.is_open()) { // If the input file is not open
 			cout << "Couldn't open the file" << endl;
 		}
 	} while (!dicFile.is_open());
 	dicFile.close();
 
-	Dictionary dic(dictionaryFile_name); // Nao se pode passar um ifstream como argumento, tenho que passar o nome do ficheiro para ele abrir dentro da class
+	Dictionary dic(dictionaryFile_name); // It is impossible to pass an ifstream as argument
 
 	int lin, col;
 	do {
 		cout << "Board size (lines columns) ? ";
 		cin >> lin >> col;
 
-		if (cin.fail()) { // Se o ficheiro de input nao estiver aberto
+		if (cin.fail()) {
 			cout << "Wrong input... Please insert two integers separated by space" << endl;
-			cin.clear(); // Limpa a errorFlag
+			cin.clear(); // Clears errorFlag
 			cin.ignore(1000, '\n'); // Ignora tudo o que esta para a frente da palavra inicial para evitar erros
 		}
 	} while (cin.fail());
