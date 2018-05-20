@@ -150,8 +150,12 @@ void Puzzle::puzzleOperations(Board b, Dictionary dic) {
 		if (option == 1) 
 			b.saveBoard(dictionaryFileName);
 		else if (option == 2) {
-			b.finalizeBoard(); // Fills the elements that are not letters or '#' with '#'
-			b.saveFinalBoard(dictionaryFileName);
+			if (b.checkFinalBoard()) { // Check if the board is correct
+				b.finalizeBoard(); // Fills the elements that are not letters or '#' with '#'
+				b.saveFinalBoard(dictionaryFileName);
+			}
+			else
+				cerr << "Board has invalid words or other errors..." << endl;
 		}
 	} while (option != 1 && option != 2 && option != 0); 
 

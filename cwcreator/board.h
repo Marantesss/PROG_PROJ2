@@ -22,6 +22,7 @@ public:
 	void loadBoard(string fileName);
 	bool wordRepeated(string word); // Checks if an inserted word was already inserted before
 	string getWildcardWord(string position); // Returns a pseudoword (with '?' and '*')
+	bool checkFinalBoard(); // Checks if everything is correct in the board before saving it
 private:
 	int numColumns; // Number of columns
 	int numLines; // Number of lines

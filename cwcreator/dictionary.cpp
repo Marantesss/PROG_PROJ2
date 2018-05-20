@@ -32,7 +32,7 @@ vector<string> Dictionary::extractWords(string line) { // Separa as palavras sep
 	line = line.substr(pos);  // elimina da line o que já foi alocado no vetor
 	pos = 0;
 
-	// PROBLEMA DE MERDA DA LINHA 29 DO DICIONARIO
+	// PROBLEMA DA LINHA 29 DO DICIONARIO
 	if (',' == line[line.size() - 1]) { // Se a ultima virgula for no final da string
 		line = line.substr(0, line.size() - 1);
 	}
@@ -74,7 +74,7 @@ vector<string> Dictionary::wildcard(string pseudoWord) { // Recebe parte de uma 
 				if (wildcardMatch(p.first.c_str(), pseudoWord.c_str()))
 					matchingWords.push_back(p.first);
 			}
-			pseudoWord = pseudoWord.substr(0, pseudoWord.length() - 1); // Remmoves a '?'
+			pseudoWord = pseudoWord.substr(0, pseudoWord.length() - 1); // Removes a '?'
 		}
 	}
 	else
