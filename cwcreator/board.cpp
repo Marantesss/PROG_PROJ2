@@ -154,7 +154,6 @@ void Board::finalizeBoard()
 		for (int j = 0; j < getColumns(); j++)
 			if (board.at(i).at(j) == '.')
 				board.at(i).at(j) = '#';
-
 }
 
 void Board::saveBoard(string dictionaryFileName) {
