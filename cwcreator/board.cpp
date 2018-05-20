@@ -184,14 +184,14 @@ void Board::saveBoard(string dictionaryFileName) {
 	}
 }
 
-void Board::saveFinalBoard(string dictionaryFileName) // Same as saveBoard but the name is chosen by the user
+void Board::saveFinalBoard(string dictionaryFileName) // Same as saveBoard 
 {
 	ostringstream oss; // oss is later converted to string
 	int boardName = boardNameCounter();
 
 	oss << "b" << setfill('0') << setw(3) << boardName;
 	oss << ".txt"; // oss = bxxx.txt
-	ofstream boardFile(oss.str());
+	ofstream boardFile;
 
 	cout << "File will be saved into a text file..." << endl << endl;
 

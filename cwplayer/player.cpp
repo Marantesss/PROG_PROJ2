@@ -7,13 +7,15 @@
 #include <string>
 #include <iostream>
 #include <sstream>
-#include <fstream> 
+#include <fstream>
+#include <iomanip>
 
 using namespace std;
+bool fileExists(const string fileName);
 
 Player::Player()
 {
-	string dictionaryFile_name= "synonyms.txt", crosswordsFile_name="b001.txt";
+	string dictionaryFile_name, crosswordsFile_name;
 	ifstream dicFile, crossFile;
 
 	cout << "---------------------------------------" << endl << "CROSSWORDS PLAYER" << endl << "---------------------------------------" << endl;
@@ -25,21 +27,24 @@ Player::Player()
 	cout << "=======================================" << endl << endl;
 
 
+
 	string playerName;
 	cout << "Name of Player? ";
 	cin >> playerName;
 
 	nameOfPlayer = playerName;
 
+	crosswordsFile_name = boardToOpen(); // Randomizes a board that existes
+
 	crossFile.open(crosswordsFile_name);
 
 	getline(crossFile, dictionaryFile_name);
 
 	Dictionary dic(dictionaryFile_name);
-	Board b(0, 0);
 	Board bplayer(0, 0);
 
-	b.loadBoard(crosswordsFile_name);
+	cout << endl << "Opened board " << crosswordsFile_name << endl;
+	
 	bplayer.loadBoard(crosswordsFile_name);
 	bplayer.emptyGrid();
 	bplayer.showBoard();
@@ -57,7 +62,7 @@ Player::Player()
 	if (bplayer.checkSolution()) 
 	{
 		setcolor(2);
-		cout << "CONGRATS!";
+		cout << "CONGRATS! Your solution is correct. " << endl;
 		setcolor(7, 0);
 		savePlayer(crosswordsFile_name);
 	}
@@ -65,6 +70,29 @@ Player::Player()
 	{
 		cout << "Better luck next time...";
 	}
+}
+
+string Player::boardToOpen() {
+	ostringstream oss;
+	vector<string> boardNames;
+
+	for (int i = 1; i < 1000; i++) {
+		oss << "b" << setfill('0') << setw(3) << i;
+		oss << ".txt"; // oss = bxxx.txt
+
+		if (fileExists(oss.str()))
+			boardNames.push_back(oss.str());
+		else {
+			break;
+		}
+	}
+
+	srand(time(NULL));
+
+	int boardPos;
+	boardPos = rand() % boardNames.size();
+
+	return boardNames.at(boardPos);
 }
 
 void Player::playerOperations(Board &b, Dictionary dic)
@@ -207,7 +235,6 @@ void Player::addHint(Board b, Dictionary dic, string position) { // Adds 1 hint 
 		verticalHints.insert(pair<string, vector<string>>(position, hints)); // Updates the map replacing the element
 	}
 }
-bool fileExists(const string fileName);
 
 void Player::savePlayer(string crossFileName)
 {

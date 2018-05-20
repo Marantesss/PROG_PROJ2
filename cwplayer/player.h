@@ -10,6 +10,7 @@ class Player
 public:
 	Player();
 	void playerOperations(Board &b, Dictionary dic);
+	string boardToOpen();
 	void showHints();
 	void makeHints(Board b, Dictionary dic);
 	void addHint(Board b, Dictionary dic, string position);
