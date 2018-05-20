@@ -1,5 +1,4 @@
 #include "board.h"
-#include "puzzle.h"
 #include "colors.h"
 #include <vector>
 #include <string>
@@ -32,6 +31,11 @@ int Board::getColumns() const
 int Board::getLines() const
 {
 	return numLines;
+}
+
+map<string, string> Board::getPosition_words() // devolve o vetor position_words
+{
+	return position_words;
 }
 
 void Board::showBoard() 

@@ -170,7 +170,16 @@ int Puzzle::resumePuzzle() { // Resume a criacao de um puzzle
 	cout << "Board file name ? ";
 	cin >> crosswordsFile_name;
 
-	crossFile.open(crosswordsFile_name);
+	do {
+		cout << "Board file name ? ";
+		cin >> crosswordsFile_name;
+
+		crossFile.open(crosswordsFile_name); // open input file
+
+		if (!crossFile.is_open()) { // If the input file is not open
+			cout << "Couldn't open the file" << endl;
+		}
+	} while (!crossFile.is_open());
 	
 	getline(crossFile, dictionaryFile_name); // Extracts the name of the dictionary file
 	dictionaryFileName = dictionaryFile_name; // Puzzle class variable used to save the board

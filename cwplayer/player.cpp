@@ -34,7 +34,7 @@ Player::Player()
 
 	nameOfPlayer = playerName;
 
-	crosswordsFile_name = boardToOpen(); // Randomizes a board that existes
+	crosswordsFile_name = boardToOpen(); // Randomizes a board that exists
 
 	crossFile.open(crosswordsFile_name);
 
@@ -62,13 +62,13 @@ Player::Player()
 	if (bplayer.checkSolution()) 
 	{
 		setcolor(2);
-		cout << "CONGRATS! Your solution is correct. " << endl;
+		cout << "CONGRATULATIONS! Your solution is correct... " << endl;
 		setcolor(7, 0);
 		savePlayer(crosswordsFile_name);
 	}
 	else
 	{
-		cout << "Better luck next time...";
+		cout << "Better luck next time..." << endl;
 	}
 }
 
@@ -169,7 +169,7 @@ void Player::showHints() {
 		cout << p.first << "- ";
 		for (int i = 0; i < p.second.size(); i++) {
 			if (i == p.second.size() - 1)
-				cout << p.second.at(i) << ";";
+				cout << p.second.at(i) << ";" << endl;
 			else cout << p.second.at(i) << ", ";
 		}
 	}
@@ -196,12 +196,12 @@ void Player::makeHints(Board b, Dictionary dic) {
 
 		if (position[2] == 'H') {
 			position = position.substr(0, 2);
-			dic.getHints(word, 2, hints);
+			dic.getHints(word, position, 2, hints);
 			horizontalHints.insert(pair<string,vector<string>> (position, hints));
 		}
 		if (position[2] == 'V') {
 			position = position.substr(0, 2);
-			dic.getHints(word, 2, hints);
+			dic.getHints(word, position, 2, hints);
 			verticalHints.insert(pair<string, vector<string>>(position, hints));
 		}
 
@@ -221,7 +221,7 @@ void Player::addHint(Board b, Dictionary dic, string position) { // Adds 1 hint 
 		index = horizontalHints.find(position);// Gets to the synonyms position
 		for (int i = 0; i < index->second.size(); i++)
 			hints.push_back(index->second.at(i));
-		dic.getHints(word, 1, hints); // Adds a hint to the vector in the hints
+		dic.getHints(word, position, 1, hints); // Adds a hint to the vector in the hints
 		horizontalHints.erase(index);
 		horizontalHints.insert(pair<string, vector<string>>(position, hints)); // Updates the map replacing the element
 	}
@@ -230,7 +230,7 @@ void Player::addHint(Board b, Dictionary dic, string position) { // Adds 1 hint 
 		index = verticalHints.find(position);// Gets to the synonyms position
 		for (int i = 0; i < index->second.size(); i++)
 			hints.push_back(index->second.at(i));
-		dic.getHints(word, 1, hints); // Adds a hint to the vector hints
+		dic.getHints(word, position, 1, hints); // Adds a hint to the vector hints
 		verticalHints.erase(index);
 		verticalHints.insert(pair<string, vector<string>>(position, hints)); // Updates the map replacing the element
 	}

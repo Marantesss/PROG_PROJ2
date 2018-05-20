@@ -36,7 +36,7 @@ vector<string> Dictionary::extractWords(string line) { // Separa as palavras sep
 	line = line.substr(pos);  // elimina da line o que já foi alocado no vetor
 	pos = 0;
 
-	// PROBLEMA DE MERDA DA LINHA 29 DO DICIONARIO
+	// PROBLEMA DA LINHA 29 DO DICIONARIO
 	if (',' == line[line.size() - 1]) { // Se a ultima virgula for no final da string
 		line = line.substr(0, line.size() - 1);
 	}
@@ -113,7 +113,7 @@ bool Dictionary::wildcardMatch(const char *str, const char *strWild) { // Funcao
 	return !*str && !*strWild;
 }
 
-void Dictionary::getHints(string word, int numHints, vector<string> &hints) {  // Vector as parameter so it can add hints to a non-empty vector
+void Dictionary::getHints(string word, string position, int numHints, vector<string> &hints) {  // Vector as parameter so it can add hints to a non-empty vector
 	map<string, vector<string>>::const_iterator index = synonymes.find(word);
 	srand(time(NULL));
 
@@ -135,7 +135,7 @@ void Dictionary::getHints(string word, int numHints, vector<string> &hints) {  /
 			}
 			if (index->second.size() == hints.size()) {
 				setcolor(14);
-				std::cout << "No more hints available!" << endl;
+				std::cout << "No more hints available for " << position << "!" << endl;
 				setcolor(7, 0);
 				break;
 			}

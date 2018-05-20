@@ -14,6 +14,7 @@ public:
 	Board(int lines, int columns); // Atualiza o numero de colunas de linhas
 	int getColumns() const; // Devolve o numero de colunas
 	int getLines() const; // Devolve o numero de linhas
+	map<string, string> getPosition_words(); // devolve o vetor position_words
 	void showBoard(); // Da print ao tabuleiro
 	void insertWord(string position, string word);
 	void removeWord(string position);
