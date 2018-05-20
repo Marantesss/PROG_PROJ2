@@ -1,0 +1,21 @@
+C:\\Users\\gonca\\Documents\\GitHub\\PROG_PROJ2\\synonyms_WINDOWS.txt
+
+#  #  #  #  #  #  C  #  #  S  
+#  #  #  #  #  #  H  #  #  I  
+#  A  B  D  O  M  E  N  #  M  
+#  #  U  #  #  #  A  #  #  P  
+B  A  L  K  #  #  T  #  #  L  
+#  #  K  #  #  #  #  #  #  E  
+#  #  Y  E  A  R  L  Y  #  #  
+#  #  #  #  R  #  U  #  #  #  
+#  #  #  #  T  #  M  #  #  #  
+#  #  #  #  #  #  P  #  #  #  
+
+CbH ABDOMEN
+CcV BULKY
+EaH BALK
+AgV CHEAT
+GcH YEARLY
+GeV ART
+AjV SIMPLE
+GgV LUMP

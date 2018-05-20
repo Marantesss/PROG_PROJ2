@@ -1,0 +1,5 @@
+======RECORDS - board b001.txt======
+
+Name of player: GMarantes   Aditional hints: 7   Time elapsed: 2 minutes 41 seconds
+
+Name of player: TSilva   Aditional hints: 0   Time elapsed: 1 minutes 8 seconds

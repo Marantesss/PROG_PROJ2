@@ -238,7 +238,7 @@ void Player::addHint(Board b, Dictionary dic, string position) { // Adds 1 hint 
 
 void Player::savePlayer(string crossFileName)
 {
-	string recordsFileName = crossFileName.substr(0, 4) + "_t.txt";
+	string recordsFileName = crossFileName.substr(0, 4) + "_s.txt";
 	ofstream recordsFile;
 
 	if (fileExists(recordsFileName))
